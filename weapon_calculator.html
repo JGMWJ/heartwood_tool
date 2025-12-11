@@ -1,0 +1,3202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heartwood Weapon Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --primary: #3b82f6;
+            --accent: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --radius: 12px;
+            --spacing: 16px;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        h1,
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--spacing);
+            margin-bottom: 10px;
+        }
+
+        .weapon-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .weapon-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .weapon-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 4px;
+            text-align: center;
+            -moz-appearance: textfield;
+            /* Firefox */
+            appearance: textfield;
+        }
+
+        /* Hide native spin buttons */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            cursor: pointer;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--primary);
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background: var(--border);
+        }
+
+        .results-panel {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .res-icon {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .res-val {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .toggle-btn {
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+        }
+
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 16px;
+            padding-left: 40px;
+            /* Space for icon */
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Search Icon pseudo-element */
+        .search-container::before {
+            content: "🔍";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 5px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .tab {
+            background: transparent;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        /* Tooltip CSS */
+        .tooltip-container {
+            position: relative;
+        }
+
+        .tooltip-content {
+            visibility: hidden;
+            width: 220px;
+            background-color: #222;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            /* Position above */
+            left: 50%;
+            margin-left: -110px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .tooltip-content::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #222 transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .stat-name {
+            color: var(--text-muted);
+        }
+
+        .stat-val {
+            color: var(--accent);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Left: Item Selection -->
+        <div class="card">
+            <div class="header-container">
+                <h1>Heartwood Online Calculator</h1>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search items..." onkeyup="filterItems()">
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('weapons')">Weapons</div>
+                <div class="tab" onclick="switchTab('warrior')">Warrior Armor</div>
+                <div class="tab" onclick="switchTab('rogue')">Rogue Armor</div>
+                <div class="tab" onclick="switchTab('priest')">Priest Armor</div>
+            </div>
+
+            <div class="item-list-container" id="itemList">
+                <!-- JS populates this -->
+            </div>
+        </div>
+
+        <!-- Right: Results -->
+        <!-- Side Panel -->
+        <aside class="results-panel" id="resultsPanel">
+            <!-- Summary -->
+            <div class="card">
+                <h2>Required Materials</h2>
+                <button class="toggle-btn" onclick="toggleMode()" id="modeBtn">Mode: Basic Materials</button>
+                <div id="resultsContent"></div>
+            </div>
+    </div>
+
+    <a href="#resultsPanel" id="mobileFab">
+        <span>📝 View Materials</span>
+    </a>
+
+    <script>
+        // ... (Translations remain same, omitting for brevity in tool call, but context needs careful handling)
+        // Actually I should be careful not to overwrite the whole script block if I can help it.
+        // The Prompt says "Replace the tabs HTML and the renderList/switchTab logic".
+        // I will target the tabs div specifically first, then the JS functions.
+
+        // Wait, replace_file_content replaces a CONTIGUOUS block.
+        // The tabs HTML is around line 240.
+        // The JS logic is around line 1060.
+        // I should stick to multiple ReplaceFileContent calls or one big MultiReplace if appropriate.
+        // Using MultiReplace is better.
+
+        // 1. Translations
+        const TRANSLATIONS = {
+            // Materials
+            "Tin Ore": "锡矿", "Copper Ore": "铜矿", "Iron Ore": "铁矿", "Coal": "煤炭",
+            "Wood": "木材", "Gold Ore": "金矿", "Tungsten Ore": "钨矿", "Platinum Ore": "白金矿",
+            "Cobalt Ore": "钴矿", "Mythril Ore": "秘银矿", "Obsidian Ore": "黑曜石矿", "Radium Ore": "镭矿",
+            "Tin Bar": "锡锭", "Copper Bar": "铜锭", "Iron Bar": "铁锭", "Steel Bar": "钢锭",
+            "Gold Bar": "金锭", "Tungsten Bar": "钨锭", "Platinum Bar": "白金锭",
+            "Cobalt Bar": "钴锭", "Mythril Bar": "秘银锭", "Obsidian Bar": "黑曜石锭", "Radium Bar": "镭锭",
+            "Bone": "骨头", "Lumin Crystal": "流光水晶", "Blood of Canis": "卡尼斯之血",
+            "Lost Soul": "失落之魂", "Pearl": "珍珠", "Fish Barb": "鱼钩", "Fish Resin": "鱼脂",
+            "Hardened Scale": "硬化鳞片", "Oak Log": "橡木原木", "Pine Log": "松木原木",
+            "Stag Rack": "雄鹿角架", "Broken Stag Antler": "破碎的雄鹿角", "Sailor's Song": "水手之歌",
+
+            // // Weapons
+            // "Tin Sword": "锡剑", "Copper Sword": "铜剑", "Copper Dagger": "铜匕首",
+            // "Bone Blade": "骨刃", "Iron Sword": "铁剑", "Iron Polearm": "铁长柄",
+            // "Spinal Tap": "脊椎穿刺者", "Iron Dagger": "铁匕首", "Bone Splinter": "骨刺",
+            // "Steel Dagger": "钢匕首", "Steel Polearm": "钢长柄", "Steel Sword": "钢剑",
+            // "Oppressor": "压迫者", "Wrath of Canis": "卡尼斯之怒",
+            // "Tungsten Polearm": "钨长柄", "Tungsten Sword": "钨剑", "Tungsten Dagger": "钨匕首",
+            // "Overseer's Grasp": "监工之握", "Platinum Sword": "白金剑",
+            // "Platinum Dagger": "白金匕首", "Platinum Polearm": "白金长柄",
+            // "Stonescale Brutalizer": "石鳞凶器", "Barbed Chakram": "倒刺轮刃",
+            // "Cobalt Dagger": "钴匕首", "Cobalt Polearm": "钴长柄", "Cobalt Sword": "钴剑",
+            // "Mythril Sword": "秘银剑", "Mythril Polearm": "秘银长柄", "Mythril Dagger": "秘银匕首",
+            // "Obsidian Dagger": "黑曜石匕首", "Obsidian Sword": "黑曜石剑", "Obsidian Polearm": "黑曜石长柄",
+
+            // // Armor
+            // "Tin Bucket Hat": "锡桶帽", "Copper Breastplate": "铜胸甲", "Copper Boots": "铜靴",
+            // "Copper Platelegs": "铜护腿", "Mining Pants": "矿工裤", "Iron Shield": "铁盾",
+            // "Elder's Crown": "长老头冠", "Iron Breastplate": "铁胸甲", "Iron Boots": "铁靴",
+            // "Iron Platelegs": "铁护腿", "Mining Vest": "矿工背心", "Steel Shield": "钢盾",
+            // "Steel Boots": "钢靴", "Steel Platelegs": "钢护腿", "Steel Breastplate": "钢胸甲",
+            // "Steel Lid": "钢盔", "Tungsten Platelegs": "钨护腿", "Tungsten Breastplate": "钨胸甲",
+            // "Tungsten Lid": "钨盔", "Tungsten Boots": "钨靴", "Tungsten Shield": "钨盾",
+            // "Platinum Breastplate": "白金胸甲", "Platinum Boots": "白金靴", "Platinum Platelegs": "白金护腿",
+            // "Platinum Lid": "白金盔", "Platinum Shield": "白金盾", "Hardened Scale Shield": "硬化鳞盾",
+            // "Cobalt Shield": "钴盾", "Cobalt Boots": "钴靴", "Cobalt Platelegs": "钴护腿",
+            // "Cobalt Breastplate": "钴胸甲", "Cobalt Lid": "钴盔", "Mythril Shield": "秘银盾",
+            // "Mythril Helm": "秘银头盔", "Mythril Breastplate": "秘银胸甲", "Mythril Platelegs": "秘银护腿",
+            // "Mythril Boots": "秘银靴", "Obsidian Boots": "黑曜石靴", "Obsidian Platelegs": "黑曜石护腿",
+            // "Obsidian Breastplate": "黑曜石胸甲", "Obsidian Helm": "黑曜石头盔", "Obsidian Shield": "黑曜石盾",
+
+            // // Components / Blueprints
+            // "Magic Recipe: Bone Blade": "魔法配方：骨刃",
+            // "Magic Blueprint: Spinal Tap": "魔法蓝图：脊椎穿刺者",
+            // "Magic Blueprint: Bone Splinter": "魔法蓝图：骨刺",
+            // "Skeletal Dagger": "骷髅匕首",
+            // "Magic Recipe: Oppressor": "魔法配方：压迫者",
+            // "Magic Blueprint: Wrath of Canis": "魔法蓝图：卡尼斯之怒",
+            // "Fang of Canis": "卡尼斯之牙",
+            // "Magic Blueprint: Overseer's Grasp": "魔法蓝图：监工之握",
+            // "Overseer's Hand": "监工之手",
+            // "Lost Recipe: Stonescale Brutalizer": "遗失配方：石鳞凶器",
+            // "Lost Recipe: Barbed Chakram": "遗失配方：倒刺轮刃",
+            // "Magic Recipe: Elder's Crown": "魔法配方：长老头冠",
+            // "Wet Blueprint: Hardened Scale Shield": "湿蓝图：硬化鳞盾"
+        };
+
+        function getDisplayName(name) {
+            let clean = name.trim();
+            // Handle space normalization
+            clean = clean.replace(/\s+/g, ' ');
+
+            let cn = false;
+            // let cn = TRANSLATIONS[clean];
+            // if (!cn) {
+            //     if (clean.startsWith("Magic Recipe: ")) cn = "魔法配方: " + (TRANSLATIONS[clean.replace("Magic Recipe: ", "")] || "");
+            //     if (clean.startsWith("Magic Blueprint: ")) cn = "魔法蓝图: " + (TRANSLATIONS[clean.replace("Magic Blueprint: ", "")] || "");
+            //     if (clean.startsWith("Lost Recipe: ")) cn = "遗失配方: " + (TRANSLATIONS[clean.replace("Lost Recipe: ", "")] || "");
+            //     if (clean.startsWith("Wet Blueprint: ")) cn = "湿蓝图: " + (TRANSLATIONS[clean.replace("Wet Blueprint: ", "")] || "");
+            // }
+            return name;
+        }
+
+        const BASE_RECIPES = {
+            "Tin Bar": { ingredients: { "Tin Ore": 3, "Coal": 2 }, icon: "assets/items/tin_bar.png" },
+            "Copper Bar": { ingredients: { "Copper Ore": 3, "Coal": 2 }, icon: "assets/items/copper_bar.png" },
+            "Iron Bar": { ingredients: { "Iron Ore": 3, "Coal": 2 }, icon: "assets/items/iron_bar.png" },
+            "Steel Bar": { ingredients: { "Iron Ore": 6, "Coal": 3 }, icon: "assets/items/steel_bar.png" },
+            "Tungsten Bar": { ingredients: { "Tungsten Ore": 3, "Coal": 2 }, icon: "assets/items/tungsten_bar.png" },
+            "Platinum Bar": { ingredients: { "Platinum Ore": 3, "Coal": 4 }, icon: "assets/items/platinum_bar.png" },
+            "Cobalt Bar": { ingredients: { "Cobalt Ore": 3, "Coal": 4 }, icon: "assets/items/cobalt_bar.png" },
+            "Mythril Bar": { ingredients: { "Mythril Ore": 3, "Coal": 4 }, icon: "assets/items/mythril_bar.png" },
+            "Obsidian Bar": { ingredients: { "Obsidian Ore": 3, "Coal": 6 }, icon: "assets/items/obsidian_bar.png" },
+            "Radium Bar": { ingredients: { "Radium Ore": 3, "Coal": 6 }, icon: "assets/items/radium_bar.png" },
+            "Coal": { ingredients: { "Wood": 2 }, icon: "assets/items/coal.png" },
+
+            // Leather Recipes
+            "Flimsy Leather": { ingredients: { "Rodent Pelt": 2 }, icon: "assets/items/flimsy_leather.png" },
+            "Plush Leather": { ingredients: { "Rodent Pelt": 2, "Soft Hide": 1 }, icon: "assets/items/plush_leather.png" },
+            "Fragile Leather": { ingredients: { "Soft Hide": 2, "Bone Dust": 1 }, icon: "assets/items/fragile_leather.png" },
+            "Bone Dust": { ingredients: { "Bone": 2 }, icon: "assets/items/bone_dust.png" },
+            "Light Leather Cord": { ingredients: { "Rodent Pelt": 6, "Bone Dust": 1 }, icon: "assets/items/light_leather_cord.png" },
+            "Delicate Leather": { ingredients: { "Rodent Pelt": 2, "Soft Hide": 2, "Bone Dust": 1 }, icon: "assets/items/delicate_leather.png" },
+            "Heavy Leather Cord": { ingredients: { "Soft Hide": 2, "Medium Hide": 2 }, icon: "assets/items/heavy_leather_cord.png" },
+            "Graceful Leather": { ingredients: { "Medium Hide": 2, "Bone Dust": 1 }, icon: "assets/items/graceful_leather.png" },
+            "Sturdy Leather": { ingredients: { "Soft Hide": 2, "Medium Hide": 2, "Leather Oil": 1 }, icon: "assets/items/sturdy_leather.png" },
+            "Durable Leather": { ingredients: { "Thick Hide": 2, "Leather Oil": 1 }, icon: "assets/items/durable_leather.png" },
+            "Rugged Leather": { ingredients: { "Medium Hide": 2, "Thick Hide": 2, "Leather Oil": 1 }, icon: "assets/items/rugged_leather.png" },
+
+            // Fabric Recipes
+            "Light Cotton Fabric": { ingredients: { "Cotton": 3 }, icon: "assets/items/light_cotton_fabric.png" },
+            "Thread": { ingredients: { "Cotton": 6 }, icon: "assets/items/thread.png" },
+            "Heavy Cotton Fabric": { ingredients: { "Cotton": 6 }, icon: "assets/items/heavy_cotton_fabric.png" },
+            "Wool Fabric": { ingredients: { "Wool": 4 }, icon: "assets/items/wool_fabric.png" },
+            "Yarn": { ingredients: { "Wool": 4 }, icon: "assets/items/yarn.png" },
+            "Linen Fabric": { ingredients: { "Wool": 4, "Cotton": 3 }, icon: "assets/items/linen_fabric.png" },
+            "Silk Thread": { ingredients: { "Silk": 4 }, icon: "assets/items/silk_thread.png" },
+            "Black Wool Fabric": { ingredients: { "Black Wool": 10 }, icon: "assets/items/black_wool_fabric.png" },
+            "Silk Fabric": { ingredients: { "Silk": 4 }, icon: "assets/items/silk_fabric.png" },
+            "Lace Fabric": { ingredients: { "Wool": 2, "Silk": 4, "Mystic Thread": 1 }, icon: "assets/items/lace_fabric.png" },
+            "Runeweave Fabric": { ingredients: { "Lace Fabric": 4, "Mystic Thread": 1 }, icon: "assets/items/runeweave_fabric.png" },
+            "Hexweave Fabric": { ingredients: { "Lace Fabric": 2, "Obsidian Fragments": 1 }, icon: "assets/items/hexweave_fabric.png" }
+        };
+
+        const WEAPONS = [
+            { "id": "tin_sword", "name": "Tin Sword", "level": 1, "icon": "assets/weapons/tin_sword.png", "ingredients": { "Tin Bar": 5 } },
+            { "id": "copper_sword", "name": "Copper Sword", "level": 5, "icon": "assets/weapons/copper_sword.png", "ingredients": { "Copper Bar": 5 } },
+            { "id": "copper_dagger", "name": "Copper Dagger", "level": 5, "icon": "assets/weapons/copper_dagger.png", "ingredients": { "Copper Bar": 3 } },
+            { "id": "bone_blade", "name": "Bone Blade", "level": 9, "icon": "assets/weapons/bone_blade.png", "ingredients": { "Magic Recipe: Bone Blade": 1, "Steel Bar": 5, "Bone": 10 } },
+            { "id": "iron_sword", "name": "Iron Sword", "level": 10, "icon": "assets/weapons/iron_sword.png", "ingredients": { "Iron Bar": 5 } },
+            { "id": "iron_polearm", "name": "Iron Polearm", "level": 10, "icon": "assets/weapons/iron_polearm.png", "ingredients": { "Iron Bar": 10 } },
+            { "id": "spinal_tap", "name": "Spinal Tap", "level": 10, "icon": "assets/weapons/spinal_tap.png", "ingredients": { "Magic Blueprint: Spinal Tap": 1, "Bone Blade": 1, "Lumin Crystal": 1 } },
+            { "id": "iron_dagger", "name": "Iron Dagger", "level": 10, "icon": "assets/weapons/iron_dagger.png", "ingredients": { "Iron Bar": 3 } },
+            { "id": "bone_splinter", "name": "Bone Splinter", "level": 15, "icon": "assets/weapons/bone_splinter.png", "ingredients": { "Magic Blueprint: Bone Splinter": 1, "Skeletal Dagger": 1, "Lumin Crystal": 2, "Bone": 10 } },
+            { "id": "steel_dagger", "name": "Steel Dagger", "level": 20, "icon": "assets/weapons/steel_dagger.png", "ingredients": { "Steel Bar": 3 } },
+            { "id": "steel_polearm", "name": "Steel Polearm", "level": 20, "icon": "assets/weapons/steel_polearm.png", "ingredients": { "Steel Bar": 10 } },
+            { "id": "steel_sword", "name": "Steel Sword", "level": 20, "icon": "assets/weapons/steel_sword.png", "ingredients": { "Steel Bar": 5 } },
+            { "id": "oppressor", "name": "Oppressor", "level": 25, "icon": "assets/weapons/oppressor.png", "ingredients": { "Magic Recipe: Oppressor": 1, "Bone": 50, "Steel Bar": 10 } },
+            { "id": "wrath_of_canis", "name": "Wrath of Canis", "level": 25, "icon": "assets/weapons/wrath_of_canis.png", "ingredients": { "Magic Blueprint: Wrath of Canis": 1, "Fang of Canis": 1, "Blood of Canis": 10, "Lumin Crystal": 2 } },
+            { "id": "tungsten_polearm", "name": "Tungsten Polearm", "level": 30, "icon": "assets/weapons/tungsten_polearm.png", "ingredients": { "Tungsten Bar": 10 } },
+            { "id": "tungsten_sword", "name": "Tungsten Sword", "level": 30, "icon": "assets/weapons/tungsten_sword.png", "ingredients": { "Tungsten Bar": 5 } },
+            { "id": "tungsten_dagger", "name": "Tungsten Dagger", "level": 30, "icon": "assets/weapons/tungsten_dagger.png", "ingredients": { "Tungsten Bar": 3 } },
+            { "id": "overseers_grasp", "name": "Overseer's Grasp", "level": 35, "icon": "assets/weapons/overseers_grasp.png", "ingredients": { "Magic Blueprint: Overseer's Grasp": 1, "Overseer's Hand": 1, "Lost Soul": 30, "Lumin Crystal": 10 } },
+            { "id": "platinum_sword", "name": "Platinum Sword", "level": 40, "icon": "assets/weapons/platinum_sword.png", "ingredients": { "Platinum Bar": 5 } },
+            { "id": "platinum_dagger", "name": "Platinum Dagger", "level": 40, "icon": "assets/weapons/platinum_dagger.png", "ingredients": { "Platinum Bar": 3 } },
+            { "id": "platinum_polearm", "name": "Platinum Polearm", "level": 40, "icon": "assets/weapons/platinum_polearm.png", "ingredients": { "Platinum Bar": 10 } },
+            { "id": "stonescale_brutalizer", "name": "Stonescale Brutalizer", "level": 45, "icon": "assets/weapons/stonescale_brutalizer.png", "ingredients": { "Lost Recipe: Stonescale Brutalizer": 1, "Hardened Scale": 15, "Fish Barb": 5, "Pearl": 1, "Fish Resin": 1 } },
+            { "id": "barbed_chakram", "name": "Barbed Chakram", "level": 45, "icon": "assets/weapons/barbed_chakram.png", "ingredients": { "Lost Recipe: Barbed Chakram": 1, "Fish Barb": 15, "Pearl": 1, "Fish Resin": 1 } },
+            { "id": "cobalt_dagger", "name": "Cobalt Dagger", "level": 50, "icon": "assets/weapons/cobalt_dagger.png", "ingredients": { "Cobalt Bar": 3 } },
+            { "id": "cobalt_polearm", "name": "Cobalt Polearm", "level": 50, "icon": "assets/weapons/cobalt_polearm.png", "ingredients": { "Cobalt Bar": 10 } },
+            { "id": "cobalt_sword", "name": "Cobalt Sword", "level": 50, "icon": "assets/weapons/cobalt_sword.png", "ingredients": { "Cobalt Bar": 5 } },
+            { "id": "mythril_sword", "name": "Mythril Sword", "level": 60, "icon": "assets/weapons/mythril_sword.png", "ingredients": { "Mythril Bar": 5 } },
+            { "id": "mythril_polearm", "name": "Mythril Polearm", "level": 60, "icon": "assets/weapons/mythril_polearm.png", "ingredients": { "Mythril Bar": 10 } },
+            { "id": "mythril_dagger", "name": "Mythril Dagger", "level": 60, "icon": "assets/weapons/mythril_dagger.png", "ingredients": { "Mythril Bar": 3 } },
+            { "id": "obsidian_dagger", "name": "Obsidian Dagger", "level": 70, "icon": "assets/weapons/obsidian_dagger.png", "ingredients": { "Obsidian Bar": 3 } },
+            { "id": "obsidian_sword", "name": "Obsidian Sword", "level": 70, "icon": "assets/weapons/obsidian_sword.png", "ingredients": { "Obsidian Bar": 5 } },
+            { "id": "obsidian_polearm", "name": "Obsidian Polearm", "level": 70, "icon": "assets/weapons/obsidian_polearm.png", "ingredients": { "Obsidian Bar": 10 } }
+        ];
+
+        const ARMOR = [
+            {
+                "id": "tin_bucket_hat",
+                "name": "Tin Bucket Hat",
+                "level": 1,
+                "icon": "assets/armor/tin_bucket_hat.png",
+                "ingredients": {
+                    "Tin Bar": 5
+                }
+            },
+            {
+                "id": "copper_breastplate",
+                "name": "Copper Breastplate",
+                "level": 12,
+                "icon": "assets/armor/copper_breastplate.png",
+                "ingredients": {
+                    "Copper Bar": 4
+                }
+            },
+            {
+                "id": "copper_boots",
+                "name": "Copper Boots",
+                "level": 11,
+                "icon": "assets/armor/copper_boots.png",
+                "ingredients": {
+                    "Copper Bar": 2
+                }
+            },
+            {
+                "id": "copper_platelegs",
+                "name": "Copper Platelegs",
+                "level": 11,
+                "icon": "assets/armor/copper_platelegs.png",
+                "ingredients": {
+                    "Copper Bar": 3
+                }
+            },
+            {
+                "id": "iron_shield",
+                "name": "Iron Shield",
+                "level": 10,
+                "icon": "assets/armor/iron_shield.png",
+                "ingredients": {
+                    "Iron Bar": 4
+                }
+            },
+            {
+                "id": "iron_breastplate",
+                "name": "Iron Breastplate",
+                "level": 22,
+                "icon": "assets/armor/iron_breastplate.png",
+                "ingredients": {
+                    "Iron Bar": 4
+                }
+            },
+            {
+                "id": "iron_boots",
+                "name": "Iron Boots",
+                "level": 21,
+                "icon": "assets/armor/iron_boots.png",
+                "ingredients": {
+                    "Iron Bar": 2
+                }
+            },
+            {
+                "id": "iron_platelegs",
+                "name": "Iron Platelegs",
+                "level": 21,
+                "icon": "assets/armor/iron_platelegs.png",
+                "ingredients": {
+                    "Iron Bar": 3
+                }
+            },
+            {
+                "id": "steel_shield",
+                "name": "Steel Shield",
+                "level": 20,
+                "icon": "assets/armor/steel_shield.png",
+                "ingredients": {
+                    "Steel Bar": 4
+                }
+            },
+            {
+                "id": "steel_boots",
+                "name": "Steel Boots",
+                "level": 31,
+                "icon": "assets/armor/steel_boots.png",
+                "ingredients": {
+                    "Steel Bar": 2
+                }
+            },
+            {
+                "id": "steel_platelegs",
+                "name": "Steel Platelegs",
+                "level": 31,
+                "icon": "assets/armor/steel_platelegs.png",
+                "ingredients": {
+                    "Steel Bar": 3
+                }
+            },
+            {
+                "id": "steel_breastplate",
+                "name": "Steel Breastplate",
+                "level": 32,
+                "icon": "assets/armor/steel_breastplate.png",
+                "ingredients": {
+                    "Steel Bar": 4
+                }
+            },
+            {
+                "id": "steel_lid",
+                "name": "Steel Lid",
+                "level": 33,
+                "icon": "assets/armor/steel_lid.png",
+                "ingredients": {
+                    "Steel Bar": 5
+                }
+            },
+            {
+                "id": "tungsten_platelegs",
+                "name": "Tungsten Platelegs",
+                "level": 41,
+                "icon": "assets/armor/tungsten_platelegs.png",
+                "ingredients": {
+                    "Tungsten Bar": 3
+                }
+            },
+            {
+                "id": "tungsten_breastplate",
+                "name": "Tungsten Breastplate",
+                "level": 42,
+                "icon": "assets/armor/tungsten_breastplate.png",
+                "ingredients": {
+                    "Tungsten Bar": 4
+                }
+            },
+            {
+                "id": "tungsten_lid",
+                "name": "Tungsten Lid",
+                "level": 43,
+                "icon": "assets/armor/tungsten_lid.png",
+                "ingredients": {
+                    "Tungsten Bar": 5
+                }
+            },
+            {
+                "id": "tungsten_boots",
+                "name": "Tungsten Boots",
+                "level": 41,
+                "icon": "assets/armor/tungsten_boots.png",
+                "ingredients": {
+                    "Tungsten Bar": 2
+                }
+            },
+            {
+                "id": "tungsten_shield",
+                "name": "Tungsten Shield",
+                "level": 30,
+                "icon": "assets/armor/tungsten_shield.png",
+                "ingredients": {
+                    "Tungsten Bar": 4
+                }
+            },
+            {
+                "id": "platinum_breastplate",
+                "name": "Platinum Breastplate",
+                "level": 52,
+                "icon": "assets/armor/platinum_breastplate.png",
+                "ingredients": {
+                    "Platinum Bar": 4
+                }
+            },
+            {
+                "id": "platinum_boots",
+                "name": "Platinum Boots",
+                "level": 51,
+                "icon": "assets/armor/platinum_boots.png",
+                "ingredients": {
+                    "Platinum Bar": 2
+                }
+            },
+            {
+                "id": "platinum_platelegs",
+                "name": "Platinum Platelegs",
+                "level": 51,
+                "icon": "assets/armor/platinum_platelegs.png",
+                "ingredients": {
+                    "Platinum Bar": 3
+                }
+            },
+            {
+                "id": "platinum_lid",
+                "name": "Platinum Lid",
+                "level": 53,
+                "icon": "assets/armor/platinum_lid.png",
+                "ingredients": {
+                    "Platinum Bar": 5
+                }
+            },
+            {
+                "id": "platinum_shield",
+                "name": "Platinum Shield",
+                "level": 40,
+                "icon": "assets/armor/platinum_shield.png",
+                "ingredients": {
+                    "Platinum Bar": 4
+                }
+            },
+            {
+                "id": "hardened_scale_shield",
+                "name": "Hardened Scale Shield",
+                "level": 42,
+                "icon": "assets/armor/hardened_scale_shield.png",
+                "ingredients": {
+                    "Wet Blueprint: Hardened Scale Shield": 1,
+                    "Hardened Scale": 20,
+                    "Fish Resin": 1,
+                    "Pearl": 1,
+                    "Sailor's Song": 1
+                }
+            },
+            {
+                "id": "cobalt_shield",
+                "name": "Cobalt Shield",
+                "level": 50,
+                "icon": "assets/armor/cobalt_shield.png",
+                "ingredients": {
+                    "Cobalt Bar": 4
+                }
+            },
+            {
+                "id": "cobalt_boots",
+                "name": "Cobalt Boots",
+                "level": 61,
+                "icon": "assets/armor/cobalt_boots.png",
+                "ingredients": {
+                    "Cobalt Bar": 2
+                }
+            },
+            {
+                "id": "cobalt_platelegs",
+                "name": "Cobalt Platelegs",
+                "level": 61,
+                "icon": "assets/armor/cobalt_platelegs.png",
+                "ingredients": {
+                    "Cobalt Bar": 3
+                }
+            },
+            {
+                "id": "cobalt_breastplate",
+                "name": "Cobalt Breastplate",
+                "level": 62,
+                "icon": "assets/armor/cobalt_breastplate.png",
+                "ingredients": {
+                    "Cobalt Bar": 4
+                }
+            },
+            {
+                "id": "cobalt_lid",
+                "name": "Cobalt Lid",
+                "level": 63,
+                "icon": "assets/armor/cobalt_lid.png",
+                "ingredients": {
+                    "Cobalt Bar": 5
+                }
+            },
+            {
+                "id": "mythril_shield",
+                "name": "Mythril Shield",
+                "level": 60,
+                "icon": "assets/armor/mythril_shield.png",
+                "ingredients": {
+                    "Mythril Bar": 4
+                }
+            },
+            {
+                "id": "mythril_helm",
+                "name": "Mythril Helm",
+                "level": 73,
+                "icon": "assets/armor/mythril_helm.png",
+                "ingredients": {
+                    "Mythril Bar": 5
+                }
+            },
+            {
+                "id": "mythril_breastplate",
+                "name": "Mythril Breastplate",
+                "level": 72,
+                "icon": "assets/armor/mythril_breastplate.png",
+                "ingredients": {
+                    "Mythril Bar": 4
+                }
+            },
+            {
+                "id": "mythril_platelegs",
+                "name": "Mythril Platelegs",
+                "level": 71,
+                "icon": "assets/armor/mythril_platelegs.png",
+                "ingredients": {
+                    "Mythril Bar": 3
+                }
+            },
+            {
+                "id": "mythril_boots",
+                "name": "Mythril Boots",
+                "level": 71,
+                "icon": "assets/armor/mythril_boots.png",
+                "ingredients": {
+                    "Mythril Bar": 2
+                }
+            },
+            {
+                "id": "obsidian_boots",
+                "name": "Obsidian Boots",
+                "level": 81,
+                "icon": "assets/armor/obsidian_boots.png",
+                "ingredients": {
+                    "Obsidian Bar": 2
+                }
+            },
+            {
+                "id": "obsidian_platelegs",
+                "name": "Obsidian Platelegs",
+                "level": 81,
+                "icon": "assets/armor/obsidian_platelegs.png",
+                "ingredients": {
+                    "Obsidian Bar": 3
+                }
+            },
+            {
+                "id": "obsidian_breastplate",
+                "name": "Obsidian Breastplate",
+                "level": 82,
+                "icon": "assets/armor/obsidian_breastplate.png",
+                "ingredients": {
+                    "Obsidian Bar": 4
+                }
+            },
+            {
+                "id": "obsidian_helm",
+                "name": "Obsidian Helm",
+                "level": 83,
+                "icon": "assets/armor/obsidian_helm.png",
+                "ingredients": {
+                    "Obsidian Bar": 5
+                }
+            },
+            {
+                "id": "obsidian_shield",
+                "name": "Obsidian Shield",
+                "level": 70,
+                "icon": "assets/armor/obsidian_shield.png",
+                "ingredients": {
+                    "Obsidian Bar": 4
+                }
+            },
+            {
+                "id": "flimsy_strides",
+                "name": "Flimsy Strides",
+                "level": 11,
+                "icon": "assets/armor/flimsy_strides.png",
+                "ingredients": {
+                    "Flimsy Leather": 10,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "flimsy_boots",
+                "name": "Flimsy Boots",
+                "level": 11,
+                "icon": "assets/armor/flimsy_boots.png",
+                "ingredients": {
+                    "Flimsy Leather": 5,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "flimsy_coat",
+                "name": "Flimsy Coat",
+                "level": 12,
+                "icon": "assets/armor/flimsy_coat.png",
+                "ingredients": {
+                    "Flimsy Leather": 15,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "plush_strides",
+                "name": "Plush Strides",
+                "level": 21,
+                "icon": "assets/armor/plush_strides.png",
+                "ingredients": {
+                    "Plush Leather": 10,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "plush_boots",
+                "name": "Plush Boots",
+                "level": 21,
+                "icon": "assets/armor/plush_boots.png",
+                "ingredients": {
+                    "Plush Leather": 5,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "plush_coat",
+                "name": "Plush Coat",
+                "level": 22,
+                "icon": "assets/armor/plush_coat.png",
+                "ingredients": {
+                    "Plush Leather": 15,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "fragile_boots",
+                "name": "Fragile Boots",
+                "level": 31,
+                "icon": "assets/armor/fragile_boots.png",
+                "ingredients": {
+                    "Fragile Leather": 5,
+                    "Light Leather Cord": 1
+                }
+            },
+            {
+                "id": "fragile_strides",
+                "name": "Fragile Strides",
+                "level": 31,
+                "icon": "assets/armor/fragile_strides.png",
+                "ingredients": {
+                    "Fragile Leather": 10,
+                    "Yarn": 3
+                }
+            },
+            {
+                "id": "fragile_coat",
+                "name": "Fragile Coat",
+                "level": 32,
+                "icon": "assets/armor/fragile_coat.png",
+                "ingredients": {
+                    "Fragile Leather": 15,
+                    "Yarn": 3
+                }
+            },
+            {
+                "id": "fragile_hood",
+                "name": "Fragile Hood",
+                "level": 33,
+                "icon": "assets/armor/fragile_hood.png",
+                "ingredients": {
+                    "Fragile Leather": 20,
+                    "Yarn": 4
+                }
+            },
+            {
+                "id": "delicate_boots",
+                "name": "Delicate Boots",
+                "level": 41,
+                "icon": "assets/armor/delicate_boots.png",
+                "ingredients": {
+                    "Delicate Leather": 5,
+                    "Light Leather Cord": 1
+                }
+            },
+            {
+                "id": "delicate_strides",
+                "name": "Delicate Strides",
+                "level": 41,
+                "icon": "assets/armor/delicate_strides.png",
+                "ingredients": {
+                    "Delicate Leather": 10,
+                    "Light Leather Cord": 2
+                }
+            },
+            {
+                "id": "delicate_coat",
+                "name": "Delicate Coat",
+                "level": 42,
+                "icon": "assets/armor/delicate_coat.png",
+                "ingredients": {
+                    "Delicate Leather": 15,
+                    "Light Leather Cord": 4
+                }
+            },
+            {
+                "id": "delicate_hood",
+                "name": "Delicate Hood",
+                "level": 43,
+                "icon": "assets/armor/delicate_hood.png",
+                "ingredients": {
+                    "Delicate Leather": 20,
+                    "Light Leather Cord": 4
+                }
+            },
+            {
+                "id": "graceful_strides",
+                "name": "Graceful Strides",
+                "level": 51,
+                "icon": "assets/armor/graceful_strides.png",
+                "ingredients": {
+                    "Graceful Leather": 10,
+                    "Heavy Leather Cord": 2
+                }
+            },
+            {
+                "id": "graceful_boots",
+                "name": "Graceful Boots",
+                "level": 51,
+                "icon": "assets/armor/graceful_boots.png",
+                "ingredients": {
+                    "Graceful Leather": 5,
+                    "Light Leather Cord": 1
+                }
+            },
+            {
+                "id": "graceful_coat",
+                "name": "Graceful Coat",
+                "level": 52,
+                "icon": "assets/armor/graceful_coat.png",
+                "ingredients": {
+                    "Graceful Leather": 15,
+                    "Heavy Leather Cord": 3
+                }
+            },
+            {
+                "id": "graceful_hood",
+                "name": "Graceful Hood",
+                "level": 53,
+                "icon": "assets/armor/graceful_hood.png",
+                "ingredients": {
+                    "Graceful Leather": 20,
+                    "Light Leather Cord": 4
+                }
+            },
+            {
+                "id": "sturdy_boots",
+                "name": "Sturdy Boots",
+                "level": 61,
+                "icon": "assets/armor/sturdy_boots.png",
+                "ingredients": {
+                    "Sturdy Leather": 5,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "sturdy_strides",
+                "name": "Sturdy Strides",
+                "level": 61,
+                "icon": "assets/armor/sturdy_strides.png",
+                "ingredients": {
+                    "Sturdy Leather": 10,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "sturdy_coat",
+                "name": "Sturdy Coat",
+                "level": 62,
+                "icon": "assets/armor/sturdy_coat.png",
+                "ingredients": {
+                    "Sturdy Leather": 15,
+                    "Thread": 3
+                }
+            },
+            {
+                "id": "sturdy_hood",
+                "name": "Sturdy Hood",
+                "level": 63,
+                "icon": "assets/armor/sturdy_hood.png",
+                "ingredients": {
+                    "Sturdy Leather": 20,
+                    "Thread": 4
+                }
+            },
+            {
+                "id": "durable_strides",
+                "name": "Durable Strides",
+                "level": 71,
+                "icon": "assets/armor/durable_strides.png",
+                "ingredients": {
+                    "Durable Leather": 10,
+                    "Heavy Leather Cord": 2
+                }
+            },
+            {
+                "id": "durable_boots",
+                "name": "Durable Boots",
+                "level": 71,
+                "icon": "assets/armor/durable_boots.png",
+                "ingredients": {
+                    "Durable Leather": 5,
+                    "Light Leather Cord": 1
+                }
+            },
+            {
+                "id": "durable_coat",
+                "name": "Durable Coat",
+                "level": 72,
+                "icon": "assets/armor/durable_coat.png",
+                "ingredients": {
+                    "Durable Leather": 15,
+                    "Heavy Leather Cord": 3
+                }
+            },
+            {
+                "id": "durable_hood",
+                "name": "Durable Hood",
+                "level": 73,
+                "icon": "assets/armor/durable_hood.png",
+                "ingredients": {
+                    "Durable Leather": 20,
+                    "Light Leather Cord": 4
+                }
+            },
+            {
+                "id": "rugged_strides",
+                "name": "Rugged Strides",
+                "level": 81,
+                "icon": "assets/armor/rugged_strides.png",
+                "ingredients": {
+                    "Rugged Leather": 10,
+                    "Heavy Leather Cord": 2
+                }
+            },
+            {
+                "id": "rugged_boots",
+                "name": "Rugged Boots",
+                "level": 81,
+                "icon": "assets/armor/rugged_boots.png",
+                "ingredients": {
+                    "Rugged Leather": 5,
+                    "Light Leather Cord": 1
+                }
+            },
+            {
+                "id": "rugged_coat",
+                "name": "Rugged Coat",
+                "level": 82,
+                "icon": "assets/armor/rugged_coat.png",
+                "ingredients": {
+                    "Rugged Leather": 15,
+                    "Heavy Leather Cord": 3
+                }
+            },
+            {
+                "id": "rugged_hood",
+                "name": "Rugged Hood",
+                "level": 83,
+                "icon": "assets/armor/rugged_hood.png",
+                "ingredients": {
+                    "Rugged Leather": 20,
+                    "Light Leather Cord": 4
+                }
+            },
+            {
+                "id": "light_waders",
+                "name": "Light Waders",
+                "level": 11,
+                "icon": "assets/armor/light_waders.png",
+                "ingredients": {
+                    "Light Cotton Fabric": 6,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "light_slippers",
+                "name": "Light Slippers",
+                "level": 11,
+                "icon": "assets/armor/light_slippers.png",
+                "ingredients": {
+                    "Light Cotton Fabric": 4,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "light_robes",
+                "name": "Light Robes",
+                "level": 12,
+                "icon": "assets/armor/light_robes.png",
+                "ingredients": {
+                    "Light Cotton Fabric": 20,
+                    "Thread": 4
+                }
+            },
+            {
+                "id": "light_vestments",
+                "name": "Light Vestments",
+                "level": 12,
+                "icon": "assets/armor/light_vestments.png",
+                "ingredients": {
+                    "Light Cotton Fabric": 8,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "heavy_waders",
+                "name": "Heavy Waders",
+                "level": 21,
+                "icon": "assets/armor/heavy_waders.png",
+                "ingredients": {
+                    "Heavy Cotton Fabric": 6,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "heavy_slippers",
+                "name": "Heavy Slippers",
+                "level": 21,
+                "icon": "assets/armor/heavy_slippers.png",
+                "ingredients": {
+                    "Heavy Cotton Fabric": 4,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "heavy_vestments",
+                "name": "Heavy Vestments",
+                "level": 22,
+                "icon": "assets/armor/heavy_vestments.png",
+                "ingredients": {
+                    "Heavy Cotton Fabric": 8,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "heavy_robes",
+                "name": "Heavy Robes",
+                "level": 22,
+                "icon": "assets/armor/heavy_robes.png",
+                "ingredients": {
+                    "Heavy Cotton Fabric": 20,
+                    "Thread": 4
+                }
+            },
+            {
+                "id": "wool_waders",
+                "name": "Wool Waders",
+                "level": 31,
+                "icon": "assets/armor/wool_waders.png",
+                "ingredients": {
+                    "Wool Fabric": 6,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "wool_slippers",
+                "name": "Wool Slippers",
+                "level": 31,
+                "icon": "assets/armor/wool_slippers.png",
+                "ingredients": {
+                    "Wool Fabric": 4,
+                    "Yarn": 1
+                }
+            },
+            {
+                "id": "wool_vestments",
+                "name": "Wool Vestments",
+                "level": 32,
+                "icon": "assets/armor/wool_vestments.png",
+                "ingredients": {
+                    "Wool Fabric": 8,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "wool_robes",
+                "name": "Wool Robes",
+                "level": 32,
+                "icon": "assets/armor/wool_robes.png",
+                "ingredients": {
+                    "Wool Fabric": 20,
+                    "Thread": 4
+                }
+            },
+            {
+                "id": "wool_cowl",
+                "name": "Wool Cowl",
+                "level": 33,
+                "icon": "assets/armor/wool_cowl.png",
+                "ingredients": {
+                    "Wool Fabric": 10,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "linen_waders",
+                "name": "Linen Waders",
+                "level": 41,
+                "icon": "assets/armor/linen_waders.png",
+                "ingredients": {
+                    "Linen Fabric": 6,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "linen_slippers",
+                "name": "Linen Slippers",
+                "level": 41,
+                "icon": "assets/armor/linen_slippers.png",
+                "ingredients": {
+                    "Linen Fabric": 4,
+                    "Yarn": 1
+                }
+            },
+            {
+                "id": "linen_robes",
+                "name": "Linen Robes",
+                "level": 42,
+                "icon": "assets/armor/linen_robes.png",
+                "ingredients": {
+                    "Linen Fabric": 20,
+                    "Thread": 4
+                }
+            },
+            {
+                "id": "linen_vestments",
+                "name": "Linen Vestments",
+                "level": 42,
+                "icon": "assets/armor/linen_vestments.png",
+                "ingredients": {
+                    "Linen Fabric": 8,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "linen_cowl",
+                "name": "Linen Cowl",
+                "level": 43,
+                "icon": "assets/armor/linen_cowl.png",
+                "ingredients": {
+                    "Linen Fabric": 10,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "silk_slippers",
+                "name": "Silk Slippers",
+                "level": 51,
+                "icon": "assets/armor/silk_slippers.png",
+                "ingredients": {
+                    "Silk Fabric": 4,
+                    "Yarn": 1
+                }
+            },
+            {
+                "id": "silk_waders",
+                "name": "Silk Waders",
+                "level": 51,
+                "icon": "assets/armor/silk_waders.png",
+                "ingredients": {
+                    "Silk Fabric": 6,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "silk_vestments",
+                "name": "Silk Vestments",
+                "level": 52,
+                "icon": "assets/armor/silk_vestments.png",
+                "ingredients": {
+                    "Silk Fabric": 8,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "silk_robes",
+                "name": "Silk Robes",
+                "level": 52,
+                "icon": "assets/armor/silk_robes.png",
+                "ingredients": {
+                    "Silk Fabric": 20,
+                    "Thread": 4
+                }
+            },
+            {
+                "id": "silk_cowl",
+                "name": "Silk Cowl",
+                "level": 53,
+                "icon": "assets/armor/silk_cowl.png",
+                "ingredients": {
+                    "Silk Fabric": 10,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "lace_waders",
+                "name": "Lace Waders",
+                "level": 61,
+                "icon": "assets/armor/lace_waders.png",
+                "ingredients": {
+                    "Lace Fabric": 6,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "lace_slippers",
+                "name": "Lace Slippers",
+                "level": 61,
+                "icon": "assets/armor/lace_slippers.png",
+                "ingredients": {
+                    "Lace Fabric": 4,
+                    "Yarn": 1
+                }
+            },
+            {
+                "id": "lace_vestments",
+                "name": "Lace Vestments",
+                "level": 62,
+                "icon": "assets/armor/lace_vestments.png",
+                "ingredients": {
+                    "Lace Fabric": 8,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "lace_robes",
+                "name": "Lace Robes",
+                "level": 62,
+                "icon": "assets/armor/lace_robes.png",
+                "ingredients": {
+                    "Lace Fabric": 20,
+                    "Thread": 4
+                }
+            },
+            {
+                "id": "lace_cowl",
+                "name": "Lace Cowl",
+                "level": 63,
+                "icon": "assets/armor/lace_cowl.png",
+                "ingredients": {
+                    "Lace Fabric": 10,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "runeweave_waders",
+                "name": "Runeweave Waders",
+                "level": 71,
+                "icon": "assets/armor/runeweave_waders.png",
+                "ingredients": {
+                    "Runeweave Fabric": 6,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "runeweave_slippers",
+                "name": "Runeweave Slippers",
+                "level": 71,
+                "icon": "assets/armor/runeweave_slippers.png",
+                "ingredients": {
+                    "Runeweave Fabric": 4,
+                    "Yarn": 1
+                }
+            },
+            {
+                "id": "runeweave_vestments",
+                "name": "Runeweave Vestments",
+                "level": 72,
+                "icon": "assets/armor/runeweave_vestments.png",
+                "ingredients": {
+                    "Runeweave Fabric": 8,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "runeweave_robes",
+                "name": "Runeweave Robes",
+                "level": 72,
+                "icon": "assets/armor/runeweave_robes.png",
+                "ingredients": {
+                    "Runeweave Fabric": 20,
+                    "Thread": 4
+                }
+            },
+            {
+                "id": "runeweave_cowl",
+                "name": "Runeweave Cowl",
+                "level": 73,
+                "icon": "assets/armor/runeweave_cowl.png",
+                "ingredients": {
+                    "Runeweave Fabric": 10,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "hexweave_waders",
+                "name": "Hexweave Waders",
+                "level": 81,
+                "icon": "assets/armor/hexweave_waders.png",
+                "ingredients": {
+                    "Hexweave Fabric": 6,
+                    "Thread": 1
+                }
+            },
+            {
+                "id": "hexweave_slippers",
+                "name": "Hexweave Slippers",
+                "level": 81,
+                "icon": "assets/armor/hexweave_slippers.png",
+                "ingredients": {
+                    "Hexweave Fabric": 4,
+                    "Yarn": 1
+                }
+            },
+            {
+                "id": "hexweave_vestments",
+                "name": "Hexweave Vestments",
+                "level": 82,
+                "icon": "assets/armor/hexweave_vestments.png",
+                "ingredients": {
+                    "Hexweave Fabric": 8,
+                    "Thread": 2
+                }
+            },
+            {
+                "id": "hexweave_robes",
+                "name": "Hexweave Robes",
+                "level": 82,
+                "icon": "assets/armor/hexweave_robes.png",
+                "ingredients": {
+                    "Hexweave Fabric": 20,
+                    "Thread": 4
+                }
+            },
+            {
+                "id": "hexweave_cowl",
+                "name": "Hexweave Cowl",
+                "level": 83,
+                "icon": "assets/armor/hexweave_cowl.png",
+                "ingredients": {
+                    "Hexweave Fabric": 10,
+                    "Thread": 2
+                }
+            }
+        ];
+
+        const ALL_ITEMS = [...WEAPONS, ...ARMOR];
+
+        const ITEM_STATS = {
+            "Wooden Sword": {
+                "Attack Damage": "+2-3"
+            },
+            "Trapper Sword": {
+                "Attack Damage": "+3-4"
+            },
+            "Tin Sword": {
+                "Attack Damage": "+4-5",
+                "Critical Chance": "+1"
+            },
+            "Short Sword": {
+                "Attack Damage": "+11-12"
+            },
+            "Broken Stag Antler": {
+                "Attack Damage": "+12-13",
+                "Attack Power": "+5"
+            },
+            "Copper Sword": {
+                "Attack Damage": "+14-17",
+                "Critical Chance": "+10"
+            },
+            "Broadsword": {
+                "Attack Damage": "+17-20"
+            },
+            "Hunter\\'s Broadsword": {
+                "Attack Damage": "+21-24",
+                "Attack Power": "+9"
+            },
+            "Battered Longsword": {
+                "Attack Damage": "+20-23"
+            },
+            "Bone Blade": {
+                "Attack Damage": "+29-34",
+                "Attack Power": "+18",
+                "Critical Damage": "+22"
+            },
+            "Iron Sword": {
+                "Attack Damage": "+28-33",
+                "Critical Chance": "+19"
+            },
+            "Spinal Tap": {
+                "Attack Damage": "+35-40",
+                "Attack Power": "+22",
+                "Critical Chance": "+43"
+            },
+            "Stalker\\'s Blade": {
+                "Attack Damage": "+38-45",
+                "Attack Power": "+17"
+            },
+            "Steel Sword": {
+                "Attack Damage": "+42-49",
+                "Critical Chance": "+29"
+            },
+            "Fang of Canis": {
+                "Attack Damage": "+49-58",
+                "Attack Power": "+25"
+            },
+            "Wrath of Canis": {
+                "Attack Damage": "+65-76",
+                "Health Regen": "+137",
+                "Health": "+137  Regen",
+                "Attack Power": "+41"
+            },
+            "Tungsten Sword": {
+                "Attack Damage": "+56-65",
+                "Critical Chance": "+38"
+            },
+            "Ancient Longsword": {
+                "Attack Damage": "+73-86",
+                "Attack Power": "+46",
+                "Critical Chance": "+93"
+            },
+            "Overseer\\'s Hand": {
+                "Attack Damage": "+77-90",
+                "Attack Power": "+49",
+                "Critical Chance": "+97"
+            },
+            "Overseer\\'s Grasp": {
+                "Attack Damage": "+81-96",
+                "Attack Power": "+52",
+                "Critical Chance": "+104"
+            },
+            "Platinum Sword": {
+                "Attack Damage": "+69-81",
+                "Critical Chance": "+48"
+            },
+            "Cobalt Sword": {
+                "Attack Damage": "+83-98",
+                "Critical Chance": "+58"
+            },
+            "Mythril Sword": {
+                "Attack Damage": "+97-114",
+                "Critical Chance": "+67"
+            },
+            "Obsidian Sword": {
+                "Attack Damage": "+111-130",
+                "Critical Chance": "+77"
+            },
+            "Gypsy Shiv": {
+                "Attack Damage": "+14-15"
+            },
+            "Copper Dagger": {
+                "Attack Damage": "+15-16",
+                "Dodge Chance": "+2",
+                "Critical Chance": "+5"
+            },
+            "Hunting Knife": {
+                "Attack Damage": "+19-20",
+                "Attack Power": "+4",
+                "Critical Chance": "+8"
+            },
+            "Camping Knife": {
+                "Attack Damage": "+19-21"
+            },
+            "Iron Dagger": {
+                "Attack Damage": "+29-32",
+                "Dodge Chance": "+5",
+                "Critical Chance": "+10"
+            },
+            "Skeletal Dagger": {
+                "Attack Damage": "+43-48",
+                "Attack Power": "+19"
+            },
+            "Bone Splinter": {
+                "Attack Damage": "+51-56",
+                "Attack Power": "+31",
+                "Critical Chance": "+63"
+            },
+            "Steel Dagger": {
+                "Attack Damage": "+43-48",
+                "Dodge Chance": "+7",
+                "Critical Chance": "+14"
+            },
+            "Tungsten Dagger": {
+                "Attack Damage": "+57-63",
+                "Dodge Chance": "+10",
+                "Critical Chance": "+19"
+            },
+            "Barbed Chakram": {
+                "Attack Damage": "+66-73",
+                "Attack Power": "+14",
+                "Critical Chance": "+29"
+            },
+            "Platinum Dagger": {
+                "Attack Damage": "+72-79",
+                "Dodge Chance": "+12",
+                "Critical Chance": "+24"
+            },
+            "Cobalt Dagger": {
+                "Attack Damage": "+86-95",
+                "Dodge Chance": "+14",
+                "Critical Chance": "+29"
+            },
+            "Mythril Dagger": {
+                "Attack Damage": "+100-111",
+                "Dodge Chance": "+17",
+                "Critical Chance": "+34"
+            },
+            "Obsidian Dagger": {
+                "Attack Damage": "+114-126",
+                "Dodge Chance": "+19",
+                "Critical Chance": "+38"
+            },
+            "Peasant Spear": {
+                "Attack Damage": "+20-29"
+            },
+            "Big Game Spear": {
+                "Attack Damage": "+23-34",
+                "Health Regen": "+45",
+                "Health": "+45  Regen"
+            },
+            "Iron Polearm": {
+                "Attack Damage": "+32-48",
+                "Critical Damage": "+19"
+            },
+            "Ancient Glaive": {
+                "Attack Damage": "+40-59",
+                "Attack Power": "+43",
+                "Critical Damage": "+43"
+            },
+            "Steel Polearm": {
+                "Attack Damage": "+48-72",
+                "Critical Damage": "+29"
+            },
+            "Spectral Polearm": {
+                "Attack Damage": "+71-106",
+                "Attack Power": "+78",
+                "Critical Damage": "+78"
+            },
+            "Oppressor": {
+                "Attack Damage": "+70-105",
+                "Attack Power": "+55"
+            },
+            "Tungsten Polearm": {
+                "Attack Damage": "+64-96",
+                "Critical Damage": "+38"
+            },
+            "Platinum Polearm": {
+                "Attack Damage": "+80-121",
+                "Critical Damage": "+48"
+            },
+            "Cobalt Polearm": {
+                "Attack Damage": "+96-144",
+                "Critical Chance": "+58"
+            },
+            "Mythril Polearm": {
+                "Attack Damage": "+112-168",
+                "Critical Damage": "+67"
+            },
+            "Obsidian Polearm": {
+                "Attack Damage": "+128-192",
+                "Critical Damage": "+77"
+            },
+            "Trapper Wand": {
+                "Magic Damage": "+3-4"
+            },
+            "Wood Wand": {
+                "Magic Damage": "+4-5",
+                "Cooldown Reduction": "+1",
+                "Critical Chance": "+1"
+            },
+            "Crooked Wand": {
+                "Magic Damage": "+11-14"
+            },
+            "Oak Wand": {
+                "Magic Damage": "+14-17",
+                "Cooldown Reduction": "+8",
+                "Critical Chance": "+5"
+            },
+            "Smoulder Wand": {
+                "Magic Damage": "+17-20"
+            },
+            "Swine Fury": {
+                "Magic Damage": "+22-27",
+                "Magic Power": "+10"
+            },
+            "Pine Wand": {
+                "Magic Damage": "+27-33",
+                "Cooldown Reduction": "+16",
+                "Critical Chance": "+10"
+            },
+            "Stalker\\'s Claw": {
+                "Magic Damage": "+37-46",
+                "Magic Power": "+17"
+            },
+            "Birch Wand": {
+                "Magic Damage": "+41-50",
+                "Cooldown Reduction": "+24",
+                "Critical Chance": "+14"
+            },
+            "Pearl Wand": {
+                "Magic Damage": "+63-76",
+                "Magic Power": "+22"
+            },
+            "Maple Wand": {
+                "Magic Damage": "+54-66",
+                "Cooldown Reduction": "+32",
+                "Critical Chance": "+19"
+            },
+            "Skeletal Wand": {
+                "Magic Damage": "+71-86",
+                "Magic Power": "+32"
+            },
+            "Temporal Will": {
+                "Magic Damage": "+80-97",
+                "Magic Power": "+52",
+                "Critical Chance": "+104"
+            },
+            "Mandrove Wand": {
+                "Magic Damage": "+68-83",
+                "Cooldown Reduction": "+40",
+                "Critical Chance": "+24"
+            },
+            "Pecan Wand": {
+                "Magic Damage": "+81-99",
+                "Cooldown Reduction": "+48",
+                "Critical Chance": "+29"
+            },
+            "Palm Wand": {
+                "Magic Damage": "+95-116",
+                "Cooldown Reduction": "+56",
+                "Critical Chance": "+34"
+            },
+            "Willow Wand": {
+                "Magic Damage": "+108-132",
+                "Cooldown Reduction": "+64",
+                "Critical Chance": "+38"
+            },
+            "Pumpkin Staff": {
+                "Magic Damage": "+17-23",
+                "Health Regen": "+72",
+                "Health": "+72  Regen",
+                "Critical Damage": "+22"
+            },
+            "Fake Pumpkin Staff": {
+                "Magic Damage": "+9-12",
+                "Health Regen": "+36",
+                "Health": "+36  Regen",
+                "Critical Damage": "+11"
+            },
+            "Shepherd Staff": {
+                "Magic Damage": "+21-28"
+            },
+            "Walking Stick": {
+                "Magic Damage": "+24-33",
+                "Critical Damage": "+13"
+            },
+            "Blossom Branch": {
+                "Magic Damage": "+38-51",
+                "Attack Power": "+26",
+                "Magic Power": "+26"
+            },
+            "Pine Staff": {
+                "Magic Damage": "+34-46",
+                "Critical Damage": "+19"
+            },
+            "Skeletal Staff": {
+                "Magic Damage": "+41-56",
+                "Magic Power": "+30"
+            },
+            "Pillar of Balance": {
+                "Magic Damage": "+51-68",
+                "Magic Power": "+52",
+                "Critical Damage": "+52"
+            },
+            "Birch Staff": {
+                "Magic Damage": "+51-69",
+                "Critical Damage": "+29"
+            },
+            "Spectral Staff": {
+                "Magic Damage": "+75-102",
+                "Magic Power": "+78",
+                "Critical Damage": "+78"
+            },
+            "Ritual Staff": {
+                "Magic Damage": "+80-107",
+                "Health Regen": "+274",
+                "Health": "+274  Regen",
+                "Cooldown Reduction": "+274"
+            },
+            "Maple Staff": {
+                "Magic Damage": "+68-92",
+                "Critical Damage": "+38"
+            },
+            "Mandrove Staff": {
+                "Magic Damage": "+85-115",
+                "Critical Damage": "+48"
+            },
+            "Pecan Staff": {
+                "Magic Damage": "+102-138",
+                "Critical Damage": "+58"
+            },
+            "Palm Staff": {
+                "Magic Damage": "+119-161",
+                "Critical Damage": "+67"
+            },
+            "Willow Staff": {
+                "Magic Damage": "+136-184",
+                "Critical Damage": "+77"
+            },
+            "Blessed Cudgel": {
+                "Magic Damage": "+16-19"
+            },
+            "Razorback Mauler": {
+                "Attack Damage": "+21-24",
+                "Attack Power": "+9"
+            },
+            "Pine Mace": {
+                "Magic Damage": "+29-32"
+            },
+            "Ceremonial Crucifix": {
+                "Magic Damage": "+38-43",
+                "Magic Power": "+17"
+            },
+            "Birch Mace": {
+                "Magic Damage": "+43-48"
+            },
+            "Tail of Canis": {
+                "Magic Damage": "+54-61",
+                "Magic Power": "+24"
+            },
+            "Loyalty of Canis": {
+                "Magic Damage": "+80-91",
+                "Magic Power": "+50",
+                "Critical Chance": "+99"
+            },
+            "Maple Mace": {
+                "Magic Damage": "+57-64"
+            },
+            "Stonescale Brutalizer": {
+                "Attack Damage": "+69-78",
+                "Attack Power": "+14"
+            },
+            "Sparkling Lasher": {
+                "Magic Damage": "+65-74",
+                "Magic Power": "+29"
+            },
+            "Mandrove Mace": {
+                "Magic Damage": "+71-80"
+            },
+            "Pecan Mace": {
+                "Magic Damage": "+85-96"
+            },
+            "Palm Mace": {
+                "Magic Damage": "+99-112"
+            },
+            "Willow Mace": {
+                "Magic Damage": "+113-128"
+            },
+            "Trapper Bow": {
+                "Attack Damage": "+6-7"
+            },
+            "Wood Bow": {
+                "Attack Damage": "+8-9",
+                "Critical Chance": "+1",
+                "Critical Damage": "+1"
+            },
+            "Flimsy Longbow": {
+                "Attack Damage": "+15-18"
+            },
+            "Oak Bow": {
+                "Attack Damage": "+18-23",
+                "Critical Chance": "+10",
+                "Critical Damage": "+5"
+            },
+            "Snap Bow": {
+                "Attack Damage": "+22-27"
+            },
+            "Huntsman Bow": {
+                "Attack Damage": "+25-32",
+                "Attack Power": "+13"
+            },
+            "Carrion\\'s Cry": {
+                "Attack Damage": "+29-36",
+                "Attack Power": "+20"
+            },
+            "Pine Bow": {
+                "Attack Damage": "+36-45",
+                "Critical Chance": "+19",
+                "Critical Damage": "+10"
+            },
+            "Greenflock Bow": {
+                "Attack Damage": "+45-56",
+                "Attack Power": "+24"
+            },
+            "Birch Bow": {
+                "Attack Damage": "+54-67",
+                "Critical Chance": "+29",
+                "Critical Damage": "+14"
+            },
+            "Maple Bow": {
+                "Attack Damage": "+72-89",
+                "Critical Chance": "+38",
+                "Critical Damage": "+19"
+            },
+            "Skeletal Bow": {
+                "Attack Damage": "+87-108",
+                "Attack Power": "+60"
+            },
+            "Greenflock Seeker": {
+                "Attack Damage": "+94-117",
+                "Attack Power": "+93",
+                "Critical Chance": "+83"
+            },
+            "Spinal Recurve": {
+                "Attack Damage": "+98-123",
+                "Attack Power": "+97",
+                "Critical Chance": "+86"
+            },
+            "Mandrove Bow": {
+                "Attack Damage": "+89-111",
+                "Critical Chance": "+48",
+                "Critical Damage": "+24"
+            },
+            "Pecan Bow": {
+                "Attack Damage": "+107-134",
+                "Critical Chance": "+58",
+                "Critical Damage": "+29"
+            },
+            "Palm Bow": {
+                "Attack Damage": "+125-156",
+                "Critical Chance": "+67",
+                "Critical Damage": "+34"
+            },
+            "Willow Bow": {
+                "Attack Damage": "+143-178",
+                "Critical Chance": "+77",
+                "Critical Damage": "+38"
+            },
+            "Pumpkin Necklace": {
+                "Health Regen": "+8",
+                "Health": "+8  Regen",
+                "Attack Power": "+2",
+                "Magic Power": "+2"
+            },
+            "Pumpkin Ring": {
+                "Health Regen": "+8",
+                "Health": "+8  Regen",
+                "Attack Power": "+2",
+                "Magic Power": "+2"
+            },
+            "Cursed Elf Hat": {
+                "Health": "+70",
+                "Attack Power": "+12",
+                "Magic Power": "+12"
+            },
+            "Forest Guardian Headdress": {
+                "Health": "+14"
+            },
+            "New Adventurer Shirt": {
+                "Armor": "+5",
+                "Health": "+4"
+            },
+            "New Adventurer Pants": {
+                "Armor": "+4",
+                "Health": "+3"
+            },
+            "Blessed Elf Hat": {
+                "Health": "+70",
+                "Attack Power": "+12",
+                "Magic Power": "+12"
+            },
+            "Winterforge Coal Necklace": {
+                "Health Regen": "+2",
+                "Health": "+2  Regen",
+                "Attack Power": "+1",
+                "Magic Power": "+1"
+            },
+            "Trapper Boots": {
+                "Health": "+13"
+            },
+            "Trapper Vest": {
+                "Armor": "+23",
+                "Health": "+19"
+            },
+            "Lumberjack Boots": {
+                "Health": "+12"
+            },
+            "Tin Bucket Hat": {
+                "Armor": "+13",
+                "Health": "+11"
+            },
+            "Lumberjack Pants": {
+                "Health": "+20"
+            },
+            "Wooden Buckler": {
+                "Block": "+6"
+            },
+            "Ragged Hat": {
+                "Health": "+15",
+                "Magic Power": "+5"
+            },
+            "Trapper Trousers": {
+                "Armor": "+32",
+                "Health": "+27"
+            },
+            "Lumberjack Shirt": {
+                "Health": "+31"
+            },
+            "Spectral Pendant": {
+                "Health Regen": "+12",
+                "Health": "+12  Regen",
+                "Attack Power": "+4",
+                "Magic Power": "+4"
+            },
+            "Oak Buckler": {
+                "Block": "+11",
+                "Health": "+9",
+                "Dodge Chance": "+2"
+            },
+            "Lumberjack Hat": {
+                "Health": "+48  Regen",
+                "Health Regen": "+48"
+            },
+            "Hunter\\'s Hat": {
+                "Health": "+35",
+                "Attack Power": "+6",
+                "Magic Power": "+6"
+            },
+            "Pig Skin Shield": {
+                "Block": "+13",
+                "Health": "+22"
+            },
+            "Promise Ring": {
+                "Attack Power": "+5",
+                "Magic Power": "+5"
+            },
+            "Cutting Board": {
+                "Block": "+19",
+                "Health Regen": "+36",
+                "Health": "+36  Regen"
+            },
+            "Mining Pants": {
+                "Mining": "15  (1.5% Extra Ore Chance)",
+                "Health": "+50"
+            },
+            "Elder\\'s Crown": {
+                "Health": "+72",
+                "Magic Power": "+24"
+            },
+            "Mining Vest": {
+                "Mining": "15  (1.5% Extra Ore Chance)",
+                "Health": "+62"
+            },
+            "Bone Collar": {
+                "Attack Power": "+4",
+                "Magic Power": "+4"
+            },
+            "Mining Boots": {
+                "Mining": "15  (1.5% Extra Ore Chance)",
+                "Attack Power": "+15"
+            },
+            "Mining Helmet": {
+                "Mining": "15  (1.5% Extra Ore Chance)",
+                "Health": "+86  Regen",
+                "Health Regen": "+86"
+            },
+            "Iron Shield": {
+                "Armor": "+18",
+                "Block": "+22",
+                "Health": "+19"
+            },
+            "Pine Buckler": {
+                "Block": "+22",
+                "Health": "+19",
+                "Dodge Chance": "+5"
+            },
+            "Fishing Boots": {
+                "Health Regen": "+54",
+                "Health": "+54  Regen",
+                "Fishing Strength": "10"
+            },
+            "Fishing Waders": {
+                "Health": "+70",
+                "Fishing Strength": "10"
+            },
+            "Wool Ushanka": {
+                "Health": "+45",
+                "Attack Power": "+8",
+                "Magic Power": "+8"
+            },
+            "Skeletal Ring": {
+                "Attack Power": "+8",
+                "Magic Power": "+8"
+            },
+            "1st Dryad Bloom Robes": {
+                "Health": "+69  Regen",
+                "Health Regen": "+69",
+                "Cooldown Reduction": "+139"
+            },
+            "2nd Dryad Bloom Robes": {
+                "Health": "+69  Regen",
+                "Health Regen": "+69",
+                "Cooldown Reduction": "+139"
+            },
+            "Fishing Vest": {
+                "Health": "+89",
+                "Fishing Strength": "10"
+            },
+            "Angler\\'s Hat": {
+                "Health": "+120  Regen",
+                "Health Regen": "+120",
+                "Attack Power": "+6",
+                "Fishing Strength": "10"
+            },
+            "Climbing Boots": {
+                "Health": "+40"
+            },
+            "Steel Shield": {
+                "Armor": "+26",
+                "Block": "+33",
+                "Health": "+28"
+            },
+            "Ceremonial Beads": {
+                "Attack Power": "+11",
+                "Magic Power": "+11"
+            },
+            "Birch Buckler": {
+                "Block": "+33",
+                "Health": "+28",
+                "Dodge Chance": "+7"
+            },
+            "Prospector Helmet": {
+                "Health": "+245  Regen",
+                "Health Regen": "+245",
+                "Attack Power": "+28",
+                "Magic Power": "+28"
+            },
+            "Bat Fur Shield": {
+                "Block": "+43",
+                "Health Regen": "+82",
+                "Health": "+82  Regen"
+            },
+            "Rib Cage": {
+                "Block": "+43",
+                "Health": "+48"
+            },
+            "Radiant Protector": {
+                "Block": "+49",
+                "Health": "+133  Regen",
+                "Health Regen": "+133"
+            },
+            "Tungsten Shield": {
+                "Armor": "+35",
+                "Block": "+44",
+                "Health": "+37"
+            },
+            "Shiny Scale Shield": {
+                "Block": "+50",
+                "Magic Power": "+29"
+            },
+            "Spiked Scale Shield": {
+                "Block": "+50",
+                "Attack Power": "+14",
+                "Critical Chance": "+29"
+            },
+            "Tooth Necklace": {
+                "Attack Power": "+14",
+                "Magic Power": "+14"
+            },
+            "Maple Buckler": {
+                "Block": "+44",
+                "Health": "+37",
+                "Dodge Chance": "+10"
+            },
+            "Hardened Scale Shield": {
+                "Armor": "+53",
+                "Block": "+54",
+                "Health Regen": "+48",
+                "Health": "+48  Regen"
+            },
+            "Overseer\\'s Gaze": {
+                "Block": "+60",
+                "Health": "+162  Regen",
+                "Health Regen": "+162"
+            },
+            "Greenflock Beret": {
+                "Health": "+221",
+                "Dodge Chance": "+75",
+                "Attack Power": "+75"
+            },
+            "Mandrove Buckler": {
+                "Block": "+55",
+                "Health": "+47",
+                "Dodge Chance": "+12"
+            },
+            "Platinum Shield": {
+                "Armor": "+44",
+                "Block": "+55",
+                "Health": "+47"
+            },
+            "Black Wool Ushanka": {
+                "Health": "+389  Regen",
+                "Health Regen": "+389",
+                "Attack Power": "+44",
+                "Magic Power": "+44"
+            },
+            "Cobalt Shield": {
+                "Armor": "+53",
+                "Block": "+66",
+                "Health": "+56"
+            },
+            "Pecan Buckler": {
+                "Block": "+66",
+                "Health": "+56",
+                "Dodge Chance": "+14"
+            },
+            "Mythril Shield": {
+                "Armor": "+62",
+                "Block": "+77",
+                "Health": "+65"
+            },
+            "Palm Buckler": {
+                "Block": "+77",
+                "Health": "+65",
+                "Dodge Chance": "+17"
+            },
+            "Willow Buckler": {
+                "Block": "+88",
+                "Health": "+75",
+                "Dodge Chance": "+19"
+            },
+            "Obsidian Shield": {
+                "Armor": "+70",
+                "Block": "+88",
+                "Health": "+75"
+            },
+            "Copper Platelegs": {
+                "Armor": "+44",
+                "Health": "+37"
+            },
+            "Copper Boots": {
+                "Armor": "+22",
+                "Health": "+18"
+            },
+            "Copper Breastplate": {
+                "Armor": "+37",
+                "Health": "+46",
+                "Health Regen": "+17"
+            },
+            "Iron Platelegs": {
+                "Armor": "+83",
+                "Health": "+70"
+            },
+            "Iron Boots": {
+                "Armor": "+42",
+                "Health": "+34"
+            },
+            "Iron Breastplate": {
+                "Armor": "+68",
+                "Health": "+85",
+                "Health Regen": "+31"
+            },
+            "Steel Platelegs": {
+                "Armor": "+123",
+                "Health": "+103"
+            },
+            "Steel Boots": {
+                "Armor": "+61",
+                "Health": "+50"
+            },
+            "Steel Breastplate": {
+                "Armor": "+99",
+                "Health": "+124",
+                "Health Regen": "+45"
+            },
+            "Steel Lid": {
+                "Armor": "+58",
+                "Health": "+70",
+                "Attack Power": "+8"
+            },
+            "Tungsten Platelegs": {
+                "Armor": "+162",
+                "Health": "+137"
+            },
+            "Tungsten Boots": {
+                "Armor": "+81",
+                "Health": "+66"
+            },
+            "Tungsten Breastplate": {
+                "Armor": "+129",
+                "Health": "+162",
+                "Health Regen": "+59"
+            },
+            "Tungsten Lid": {
+                "Armor": "+76",
+                "Health": "+92",
+                "Attack Power": "+10"
+            },
+            "Platinum Boots": {
+                "Armor": "+101",
+                "Health": "+82"
+            },
+            "Platinum Platelegs": {
+                "Armor": "+202",
+                "Health": "+170"
+            },
+            "Platinum Breastplate": {
+                "Armor": "+160",
+                "Health": "+201",
+                "Health Regen": "+73"
+            },
+            "Platinum Lid": {
+                "Armor": "+93",
+                "Health": "+113",
+                "Attack Power": "+13"
+            },
+            "Cobalt Platelegs": {
+                "Armor": "+242",
+                "Health": "+203"
+            },
+            "Cobalt Boots": {
+                "Armor": "+121",
+                "Health": "+98"
+            },
+            "Cobalt Breastplate": {
+                "Armor": "+191",
+                "Health": "+240",
+                "Health Regen": "+87"
+            },
+            "Cobalt Lid": {
+                "Armor": "+111",
+                "Health": "+134",
+                "Attack Power": "+15"
+            },
+            "Mythril Platelegs": {
+                "Armor": "+281",
+                "Health": "+237"
+            },
+            "Mythril Boots": {
+                "Armor": "+141",
+                "Health": "+114"
+            },
+            "Mythril Breastplate": {
+                "Armor": "+222",
+                "Health": "+278",
+                "Health Regen": "+101"
+            },
+            "Mythril Helm": {
+                "Armor": "+128",
+                "Health": "+156",
+                "Attack Power": "+18"
+            },
+            "Obsidian Boots": {
+                "Armor": "+160",
+                "Health": "+130"
+            },
+            "Obsidian Platelegs": {
+                "Armor": "+321",
+                "Health": "+270"
+            },
+            "Obsidian Breastplate": {
+                "Armor": "+253",
+                "Health": "+317",
+                "Health Regen": "+115"
+            },
+            "Obsidian Helm": {
+                "Armor": "+146",
+                "Health": "+177",
+                "Attack Power": "+20"
+            },
+            "Flimsy Strides": {
+                "Health": "+37",
+                "Dodge Chance": "+12"
+            },
+            "Flimsy Boots": {
+                "Health": "+18",
+                "Dodge Chance": "+6"
+            },
+            "Flimsy Coat": {
+                "Health": "+46",
+                "Health Regen": "+17",
+                "Dodge Chance": "+10"
+            },
+            "Plush Strides": {
+                "Health": "+70",
+                "Dodge Chance": "+23"
+            },
+            "Plush Boots": {
+                "Health": "+34",
+                "Dodge Chance": "+11"
+            },
+            "Plush Coat": {
+                "Health": "+85",
+                "Health Regen": "+31",
+                "Dodge Chance": "+18"
+            },
+            "Fragile Boots": {
+                "Health": "+50",
+                "Dodge Chance": "+17"
+            },
+            "Fragile Strides": {
+                "Health": "+103",
+                "Dodge Chance": "+33"
+            },
+            "Fragile Coat": {
+                "Health": "+124",
+                "Health Regen": "+45",
+                "Dodge Chance": "+27"
+            },
+            "Fragile Hood": {
+                "Health": "+70",
+                "Dodge Chance": "+16",
+                "Attack Power": "+8"
+            },
+            "Delicate Boots": {
+                "Health": "+66",
+                "Dodge Chance": "+22"
+            },
+            "Delicate Strides": {
+                "Health": "+137",
+                "Dodge Chance": "+44"
+            },
+            "Delicate Coat": {
+                "Health": "+162",
+                "Health Regen": "+59",
+                "Dodge Chance": "+35"
+            },
+            "Delicate Hood": {
+                "Health": "+92",
+                "Dodge Chance": "+21",
+                "Attack Power": "+10"
+            },
+            "Graceful Strides": {
+                "Health": "+170",
+                "Dodge Chance": "+54"
+            },
+            "Graceful Boots": {
+                "Health": "+82",
+                "Dodge Chance": "+28"
+            },
+            "Graceful Coat": {
+                "Health": "+201",
+                "Health Regen": "+73",
+                "Dodge Chance": "+44"
+            },
+            "Graceful Hood": {
+                "Health": "+113",
+                "Dodge Chance": "+25",
+                "Attack Power": "+13"
+            },
+            "Sturdy Boots": {
+                "Health": "+98",
+                "Dodge Chance": "+33"
+            },
+            "Sturdy Strides": {
+                "Health": "+203",
+                "Dodge Chance": "+66"
+            },
+            "Sturdy Coat": {
+                "Health": "+240",
+                "Health Regen": "+87",
+                "Dodge Chance": "+52"
+            },
+            "Sturdy Hood": {
+                "Health": "+134",
+                "Dodge Chance": "+30",
+                "Attack Power": "+15"
+            },
+            "Durable Strides": {
+                "Health": "+237",
+                "Dodge Chance": "+77"
+            },
+            "Durable Boots": {
+                "Health": "+114",
+                "Dodge Chance": "+38"
+            },
+            "Durable Coat": {
+                "Health": "+278",
+                "Health Regen": "+101",
+                "Dodge Chance": "+60"
+            },
+            "Durable Hood": {
+                "Health": "+156",
+                "Dodge Chance": "+35",
+                "Attack Power": "+18"
+            },
+            "Rugged Strides": {
+                "Health": "+270",
+                "Dodge Chance": "+87"
+            },
+            "Rugged Boots": {
+                "Health": "+130",
+                "Dodge Chance": "+44"
+            },
+            "Rugged Coat": {
+                "Health": "+317",
+                "Health Regen": "+115",
+                "Dodge Chance": "+69"
+            },
+            "Rugged Hood": {
+                "Health": "+177",
+                "Dodge Chance": "+40",
+                "Attack Power": "+20"
+            },
+            "Light Trousers": {
+                "Health": "+37",
+                "Critical Damage": "+12"
+            },
+            "Light Slippers": {
+                "Health": "+18",
+                "Cooldown Reduction": "+20"
+            },
+            "Light Robes": {
+                "Health": "+46",
+                "Health Regen": "+17",
+                "Cooldown Reduction": "+34"
+            },
+            "Light Mantle": {
+                "Health": "+46",
+                "Critical Damage": "+10",
+                "Cooldown Reduction": "+17"
+            },
+            "Heavy Trousers": {
+                "Health": "+70",
+                "Critical Damage": "+23"
+            },
+            "Heavy Slippers": {
+                "Health": "+34",
+                "Cooldown Reduction": "+38"
+            },
+            "Heavy Mantle": {
+                "Health": "+85",
+                "Critical Damage": "+18",
+                "Cooldown Reduction": "+31"
+            },
+            "Heavy Robes": {
+                "Health": "+85",
+                "Health Regen": "+31",
+                "Cooldown Reduction": "+62"
+            },
+            "Wool Trousers": {
+                "Health": "+103",
+                "Critical Damage": "+33"
+            },
+            "Wool Slippers": {
+                "Health": "+50",
+                "Cooldown Reduction": "+56"
+            },
+            "Wool Mantle": {
+                "Health": "+124",
+                "Critical Damage": "+27",
+                "Cooldown Reduction": "+45"
+            },
+            "Wool Robes": {
+                "Health": "+124",
+                "Health Regen": "+45",
+                "Cooldown Reduction": "+90"
+            },
+            "Wool Cowl": {
+                "Health": "+70",
+                "Magic Power": "+8",
+                "Cooldown Reduction": "+53"
+            },
+            "Linen Trousers": {
+                "Health": "+137",
+                "Critical Damage": "+44"
+            },
+            "Linen Slippers": {
+                "Health": "+66",
+                "Cooldown Reduction": "+74"
+            },
+            "Linen Robes": {
+                "Health": "+162",
+                "Health Regen": "+59",
+                "Cooldown Reduction": "+118"
+            },
+            "Linen Mantle": {
+                "Health": "+162",
+                "Critical Damage": "+35",
+                "Cooldown Reduction": "+59"
+            },
+            "Linen Cowl": {
+                "Health": "+92",
+                "Magic Power": "+10",
+                "Cooldown Reduction": "+69"
+            },
+            "Silk Slippers": {
+                "Health": "+82",
+                "Cooldown Reduction": "+92"
+            },
+            "Silk Trousers": {
+                "Health": "+170",
+                "Critical Damage": "+55"
+            },
+            "Silk Mantle": {
+                "Health": "+201",
+                "Critical Damage": "+44",
+                "Cooldown Reduction": "+73"
+            },
+            "Silk Robes": {
+                "Health": "+201",
+                "Health Regen": "+73",
+                "Cooldown Reduction": "+146"
+            },
+            "Silk Cowl": {
+                "Health": "+113",
+                "Magic Power": "+13",
+                "Cooldown Reduction": "+85"
+            },
+            "Lace Trousers": {
+                "Health": "+203",
+                "Critical Damage": "+66"
+            },
+            "Lace Slippers": {
+                "Health": "+98",
+                "Cooldown Reduction": "+110"
+            },
+            "Lace Mantle": {
+                "Health": "+240",
+                "Critical Damage": "+52",
+                "Cooldown Reduction": "+87"
+            },
+            "Lace Robes": {
+                "Health": "+240",
+                "Health Regen": "+87",
+                "Cooldown Reduction": "+174"
+            },
+            "Lace Cowl": {
+                "Health": "+134",
+                "Magic Power": "+15",
+                "Cooldown Reduction": "+101"
+            },
+            "Runeweave Slippers": {
+                "Health": "+114",
+                "Cooldown Reduction": "+128"
+            },
+            "Runeweave Trousers": {
+                "Health": "+237",
+                "Critical Damage": "+77"
+            },
+            "Runeweave Mantle": {
+                "Health": "+278",
+                "Critical Damage": "+60",
+                "Cooldown Reduction": "+101"
+            },
+            "Runeweave Robes": {
+                "Health": "+278",
+                "Health Regen": "+101",
+                "Cooldown Reduction": "+202"
+            },
+            "Runeweave Cowl": {
+                "Health": "+156",
+                "Magic Power": "+18",
+                "Cooldown Reduction": "+117"
+            },
+            "Hexweave Trousers": {
+                "Health": "+270",
+                "Critical Damage": "+87"
+            },
+            "Hexweave Slippers": {
+                "Health": "+130",
+                "Cooldown Reduction": "+146"
+            },
+            "Hexweave Mantle": {
+                "Health": "+317",
+                "Critical Damage": "+69",
+                "Cooldown Reduction": "+115"
+            },
+            "Hexweave Robes": {
+                "Health": "+317",
+                "Health Regen": "+115",
+                "Cooldown Reduction": "+230"
+            },
+            "Hexweave Cowl": {
+                "Health": "+177",
+                "Magic Power": "+20",
+                "Cooldown Reduction": "+133"
+            },
+            "Light Waders": {
+                "Health": "+37",
+                "Focus": "+40"
+            },
+            "Light Vestments": {
+                "Health": "+46",
+                "Focus": "+10",
+                "Cooldown Reduction": "+17"
+            },
+            "Heavy Waders": {
+                "Health": "+70",
+                "Focus": "+76"
+            },
+            "Heavy Vestments": {
+                "Health": "+85",
+                "Focus": "+18",
+                "Cooldown Reduction": "+31"
+            },
+            "Wool Waders": {
+                "Health": "+103",
+                "Focus": "+112"
+            },
+            "Wool Vestments": {
+                "Health": "+124",
+                "Focus": "+27",
+                "Cooldown Reduction": "+45"
+            },
+            "Linen Waders": {
+                "Health": "+137",
+                "Focus": "+148"
+            },
+            "Linen Vestments": {
+                "Health": "+162",
+                "Focus": "+35",
+                "Cooldown Reduction": "+59"
+            },
+            "Silk Waders": {
+                "Health": "+170",
+                "Focus": "+184"
+            },
+            "Silk Vestments": {
+                "Health": "+201",
+                "Focus": "+44",
+                "Cooldown Reduction": "+73"
+            },
+            "Lace Waders": {
+                "Health": "+203",
+                "Focus": "+220"
+            },
+            "Lace Vestments": {
+                "Health": "+240",
+                "Focus": "+52",
+                "Cooldown Reduction": "+87"
+            },
+            "Runeweave Waders": {
+                "Health": "+237",
+                "Focus": "+256"
+            },
+            "Runeweave Vestments": {
+                "Health": "+278",
+                "Focus": "+60",
+                "Cooldown Reduction": "+101"
+            },
+            "Hexweave Waders": {
+                "Health": "+270",
+                "Focus": "+292"
+            },
+            "Hexweave Vestments": {
+                "Health": "+317",
+                "Focus": "+69",
+                "Cooldown Reduction": "+115"
+            }
+        };
+
+
+        function getIconUrl(name) {
+            let cleanName = name.replace(/\s+/g, ' ').trim();
+
+            const map = {
+                "Coal": "assets/coal.png",
+                "Wood": "assets/wood.png",
+                "Bone": "assets/items/bone.png",
+                "Lumin Crystal": "assets/items/lumin_crystal.png",
+                "Blood of Canis": "assets/items/blood_of_canis.png",
+                "Lost Soul": "assets/items/lost_soul.png",
+                "Pearl": "assets/items/pearl.png",
+                "Fish Barb": "assets/items/fish_barb.png",
+                "Fish Resin": "assets/items/fish_resin.png",
+                "Hardened Scale": "assets/items/hardened_scale.png",
+                "Stag Rack": "assets/items/stag_rack.png",
+                "Broken Stag Antler": "assets/weapons/broken_stag_antler.png",
+                "Sailor's Song": "assets/items/sailors_song.png",
+
+                // Rogue / Leather Materials
+                "Rodent Pelt": "assets/items/rodent_pelt.png",
+                "Soft Hide": "assets/items/soft_hide.png",
+                "Medium Hide": "assets/items/medium_hide.png",
+                "Thick Hide": "assets/items/thick_hide.png",
+                "Leather Oil": "assets/items/leather_oil.png",
+                "Bone Dust": "assets/items/bone_dust.png",
+
+                "Flimsy Leather": "assets/items/flimsy_leather.png",
+                "Plush Leather": "assets/items/plush_leather.png",
+                "Fragile Leather": "assets/items/fragile_leather.png",
+                "Delicate Leather": "assets/items/delicate_leather.png",
+                "Graceful Leather": "assets/items/graceful_leather.png",
+                "Sturdy Leather": "assets/items/sturdy_leather.png",
+                "Durable Leather": "assets/items/durable_leather.png",
+                "Rugged Leather": "assets/items/rugged_leather.png",
+                "Light Leather Cord": "assets/items/light_leather_cord.png",
+                "Heavy Leather Cord": "assets/items/heavy_leather_cord.png",
+
+                // Priest / Cloth Materials
+                "Cotton": "assets/items/cotton.png",
+                "Wool": "assets/items/wool.png",
+                "Silk": "assets/items/silk.png",
+                "Black Wool": "assets/items/black_wool.png",
+                "Mystic Thread": "assets/items/mystic_thread.png",
+                "Obsidian Fragments": "assets/items/obsidian_fragments.png",
+
+                "Thread": "assets/items/thread.png",
+                "Yarn": "assets/items/yarn.png",
+                "Silk Thread": "assets/items/silk_thread.png",
+                "Light Cotton Fabric": "assets/items/light_cotton_fabric.png",
+                "Heavy Cotton Fabric": "assets/items/heavy_cotton_fabric.png",
+                "Wool Fabric": "assets/items/wool_fabric.png",
+                "Linen Fabric": "assets/items/linen_fabric.png",
+                "Silk Fabric": "assets/items/silk_fabric.png",
+                "Black Wool Fabric": "assets/items/black_wool_fabric.png",
+                "Lace Fabric": "assets/items/lace_fabric.png",
+                "Runeweave Fabric": "assets/items/runeweave_fabric.png",
+                "Hexweave Fabric": "assets/items/hexweave_fabric.png",
+
+                "Magic Recipe: Bone Blade": "assets/items/recipe/bone_blade.png",
+                "Magic Blueprint: Spinal Tap": "assets/items/blueprint/spinal_tap.png",
+                "Magic Blueprint: Bone Splinter": "assets/items/blueprint/bone_splinter.png",
+                "Magic Blueprint: Wrath of Canis": "assets/items/blueprint/wrath_of_canis.png",
+                "Magic Blueprint: Overseer's Grasp": "assets/items/blueprint/overseers_grasp.png",
+                "Magic Recipe: Oppressor": "assets/items/recipe/oppressor.png",
+                "Lost Recipe: Stonescale Brutalizer": "assets/items/recipe/stonescale_brutalizer.png",
+                "Lost Recipe: Barbed Chakram": "assets/items/recipe/barbed_chakram.png",
+                "Magic Recipe: Elder's Crown": "assets/items/recipe/elders_crown.png",
+                "Wet Blueprint: Hardened Scale Shield": "assets/items/blueprint/hardened_scale_shield.png",
+                "Fang of Canis": "assets/weapons/fang_of_canis.png",
+                "Overseer's Hand": "assets/weapons/overseers_hand.png",
+                "Skeletal Dagger": "assets/weapons/skeletal_dagger.png"
+            };
+
+            if (map[cleanName]) return map[cleanName];
+
+            if (BASE_RECIPES[cleanName]) return BASE_RECIPES[cleanName].icon;
+
+            // Check All Items
+            const w = ALL_ITEMS.find(x => x.name === cleanName);
+            if (w) return w.icon;
+
+            // Fallback
+            if (cleanName.includes("Ore")) {
+                return `assets/${cleanName.toLowerCase().replace(/ /g, '_')}.png`;
+            }
+            // Try general match in local folder if desperate, or keep empty
+            return "";
+        }
+
+        let quantities = {};
+        let breakdownMode = true;
+        let currentTab = 'weapons'; // 'weapons', 'warrior', 'rogue', 'priest'
+        let searchTerm = '';
+
+        function init() {
+            // Init quantities
+            ALL_ITEMS.forEach(w => {
+                quantities[w.name] = 0;
+            });
+            // Default to weapons tab
+            switchTab('weapons');
+        }
+
+        function filterItems() {
+            searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            renderList();
+        }
+
+        function getItemCategory(item) {
+            const name = item.name;
+            const stats = ITEM_STATS[name] || {};
+
+            // 1. Explicit String Matching (Highest Priority)
+            // Priest
+            if (name.includes("Robes") || name.includes("Mantle") || name.includes("Cowl") || name.includes("Vestments") || name.includes("Waders") || name.includes("Slippers")) return 'priest';
+            if (name.includes("Elder's Crown")) return 'priest'; // Magic/Healing item
+
+            // Rogue
+            if (name.includes("Coat") || name.includes("Strides") || name.includes("Hood") || name.includes("Vest") || name.includes("Trousers") || name.includes("Trapper") || name.includes("Lumberjack") || name.includes("Mining")) return 'rogue';
+            if (name.includes("Cap") || name.includes("Mask")) return 'rogue';
+
+            // Warrior
+            if (name.includes("Shield") || name.includes("Buckler") || name.includes("Plate") || name.includes("Helm") || name.includes("Lid") || name.includes("Breastplate")) return 'warrior';
+
+            // 2. Keyword/Prefix Matching
+            // Warrior typically uses metal names without soft suffixes
+            if (name.match(/^(Tin|Copper|Iron|Steel|Tungsten|Platinum|Cobalt|Mythril|Obsidian)\s+(Boots|Gloves|Gauntlets)/)) return 'warrior';
+
+            // Rogue Keywords
+            if (name.match(/^(Flimsy|Plush|Fragile|Delicate|Graceful|Sturdy|Durable|Rugged)/)) return 'rogue';
+
+            // Priest Keywords
+            if (name.match(/^(Light|Heavy|Wool|Linen|Silk|Lace|Runeweave|Hexweave)/)) return 'priest';
+
+            // 3. Fallback to stats
+            if (stats["Magic Power"] || stats["Focus"]) return 'priest';
+            if (stats["Dodge Chance"]) return 'rogue';
+
+            // Default Warrior for leftover boots/heavy items
+            return 'warrior';
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            // Update UI tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            const tabMap = { 'weapons': 0, 'warrior': 1, 'rogue': 2, 'priest': 3 };
+            const tabs = document.querySelectorAll('.tab');
+            if (tabs[tabMap[tab]]) tabs[tabMap[tab]].classList.add('active');
+
+            searchInput.value = '';
+            searchTerm = '';
+            renderList();
+        }
+
+        function getStats(name) {
+            if (ITEM_STATS[name]) return ITEM_STATS[name];
+            // Try with escaped quote used in JSON keys from python dump
+            let escaped = name.replace(/'/g, "\\'");
+            if (ITEM_STATS[escaped]) return ITEM_STATS[escaped];
+            return null;
+        }
+
+        function getStatsHTML(name) {
+            const stats = getStats(name);
+            if (!stats) return '';
+
+            let html = '<div class="tooltip-content">';
+            // Preferred order
+            const order = ["Attack Damage", "Magic Damage", "Attack Power", "Magic Power", "Defense", "Critical Chance", "Critical Damage", "Dodge Chance"];
+
+            // Sort keys
+            const keys = Object.keys(stats).sort((a, b) => {
+                let ia = order.indexOf(a);
+                let ib = order.indexOf(b);
+                if (ia === -1) ia = 99;
+                if (ib === -1) ib = 99;
+                return ia - ib;
+            });
+
+            for (const key of keys) {
+                html += `
+                    <div class="stat-row">
+                        <span class="stat-name">${key}</span>
+                        <span class="stat-val">${stats[key]}</span>
+                    </div>`;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        function renderList() {
+            const container = document.getElementById('itemList');
+            container.innerHTML = '';
+
+            let items = [];
+            if (currentTab === 'weapons') {
+                items = WEAPONS;
+            } else {
+                // Filter Armor
+                items = ARMOR.filter(item => getItemCategory(item) === currentTab);
+            }
+
+            // Apply Search Filtering
+            if (searchTerm) {
+                const rawTerm = searchTerm.toLowerCase().trim();
+                const levelRegex = /^(?:lv|lvl|level)\.?\s*(\d+)$/;
+                const match = rawTerm.match(levelRegex);
+
+                items = items.filter(item => {
+                    // 1. Strict Level Search (e.g. "lv 11" -> only Level 11)
+                    if (match) {
+                        return item.level === parseInt(match[1]);
+                    }
+
+                    // 2. Name Search
+                    if (item.name.toLowerCase().includes(rawTerm)) return true;
+
+                    // 3. Partial Level Search (only if term consists largely of digits)
+                    if (item.level && /\d/.test(rawTerm)) {
+                        // If searching "11", match 11, 110...
+                        // Only if the term is purely digits (or close to it)
+                        const lvlStr = item.level.toString();
+                        if (rawTerm.replace(/[^0-9]/g, '') === rawTerm) {
+                            return lvlStr.includes(rawTerm);
+                        }
+                    }
+
+                    return false;
+                });
+            }
+
+            items.forEach(w => {
+                let qty = quantities[w.name] || 0;
+                const div = document.createElement('div');
+                div.className = 'weapon-row';
+                const levelTag = w.level ? `<span style="background:#222; padding:2px 6px; border-radius:4px; font-size:0.8em; margin-left:8px; color:var(--text-muted);">Lv.${w.level}</span>` : '';
+
+                const statsHtml = getStatsHTML(w.name);
+                const tooltipClass = statsHtml ? 'tooltip-container' : '';
+                const safeName = w.name.replace(/'/g, "\\'");
+
+                div.innerHTML = `
+                    <div class="weapon-info ${tooltipClass}">
+                        ${statsHtml}
+                        <img src="${w.icon}" class="weapon-icon" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PC9zdmc+';">
+                        <div>
+                            <span>${getDisplayName(w.name)}</span>
+                            ${levelTag}
+                        </div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn" onclick="updateQty('${safeName}', -1)">-</button>
+                        <input type="number" id="qty-${w.id}" value="${qty}" min="0" onchange="setQty('${safeName}', this.value)" placeholder="0">
+                        <button class="btn" onclick="updateQty('${safeName}', 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateQty(name, delta) {
+            const w = ALL_ITEMS.find(x => x.name === name);
+            if (!w) return;
+            let current = quantities[name] || 0;
+            let val = Math.max(0, current + delta);
+            quantities[name] = val;
+
+            // Update input if visible
+            let el = document.getElementById(`qty-${w.id}`);
+            if (el) el.value = val;
+
+            calculate();
+        }
+
+        function setQty(name, val) {
+            quantities[name] = Math.max(0, parseInt(val) || 0);
+            calculate();
+        }
+
+        function toggleMode() {
+            breakdownMode = !breakdownMode;
+            document.getElementById('modeBtn').innerText = breakdownMode ? "Mode: Basic Materials (基础材料)" : "Mode: Direct Ingredients (直接材料)";
+            calculate();
+        }
+
+        function calculate() {
+            let total = {};
+
+            Object.keys(quantities).forEach(name => {
+                let qty = quantities[name];
+                if (qty > 0) {
+                    addIngredients(name, qty, total);
+                }
+            });
+
+            renderResults(total);
+        }
+
+        function addIngredients(itemName, qty, accumulator) {
+            let cleanItemName = itemName.replace(/\s+/g, ' ').trim();
+            let recipe = null;
+
+            let w = ALL_ITEMS.find(x => x.name === cleanItemName);
+            let b = BASE_RECIPES[cleanItemName];
+
+            if (w) recipe = w.ingredients;
+            if (!recipe && b) recipe = b.ingredients;
+
+            if (w) {
+                if (recipe) {
+                    Object.entries(recipe).forEach(([ingName, ingQty]) => {
+                        addIngredients(ingName, ingQty * qty, accumulator);
+                    });
+                    return;
+                }
+            }
+
+            if (breakdownMode && b && recipe) {
+                Object.entries(recipe).forEach(([ingName, ingQty]) => {
+                    addIngredients(ingName, ingQty * qty, accumulator);
+                });
+                return;
+            }
+
+            accumulator[cleanItemName] = (accumulator[cleanItemName] || 0) + qty;
+        }
+
+        function renderResults(totals) {
+            const container = document.getElementById('resultsContent');
+            container.innerHTML = '';
+
+            if (Object.keys(totals).length === 0) {
+                container.innerHTML = '<div style="color:var(--text-muted); text-align:center;">No items selected (未选择物品)</div>';
+                return;
+            }
+
+            let entries = Object.entries(totals).sort((a, b) => a[0].localeCompare(b[0]));
+
+            entries.forEach(([name, qty]) => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                const icon = getIconUrl(name);
+                const imgTag = icon ? `<img src="${icon}" class="res-icon" onerror="this.style.display='none'">` : '';
+                div.innerHTML = `
+                    <span>${imgTag}${getDisplayName(name)}</span>
+                    <span class="res-val">${qty}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        init();
+
+        // Expose switchTab to global
+        window.switchTab = switchTab;
+    </script>
+</body>
+
+</html>

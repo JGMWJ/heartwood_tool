@@ -1,0 +1,1303 @@
+{
+    "Wooden Sword": {
+        "Attack Damage": "+2-3"
+    },
+    "Trapper Sword": {
+        "Attack Damage": "+3-4"
+    },
+    "Tin Sword": {
+        "Attack Damage": "+4-5",
+        "Critical Chance": "+1"
+    },
+    "Short Sword": {
+        "Attack Damage": "+11-12"
+    },
+    "Broken Stag Antler": {
+        "Attack Damage": "+12-13",
+        "Attack Power": "+5"
+    },
+    "Copper Sword": {
+        "Attack Damage": "+14-17",
+        "Critical Chance": "+10"
+    },
+    "Broadsword": {
+        "Attack Damage": "+17-20"
+    },
+    "Hunter\\'s Broadsword": {
+        "Attack Damage": "+21-24",
+        "Attack Power": "+9"
+    },
+    "Battered Longsword": {
+        "Attack Damage": "+20-23"
+    },
+    "Bone Blade": {
+        "Attack Damage": "+29-34",
+        "Attack Power": "+18",
+        "Critical Damage": "+22"
+    },
+    "Iron Sword": {
+        "Attack Damage": "+28-33",
+        "Critical Chance": "+19"
+    },
+    "Spinal Tap": {
+        "Attack Damage": "+35-40",
+        "Attack Power": "+22",
+        "Critical Chance": "+43"
+    },
+    "Stalker\\'s Blade": {
+        "Attack Damage": "+38-45",
+        "Attack Power": "+17"
+    },
+    "Steel Sword": {
+        "Attack Damage": "+42-49",
+        "Critical Chance": "+29"
+    },
+    "Fang of Canis": {
+        "Attack Damage": "+49-58",
+        "Attack Power": "+25"
+    },
+    "Wrath of Canis": {
+        "Attack Damage": "+65-76",
+        "Health Regen": "+137",
+        "Health": "+137  Regen",
+        "Attack Power": "+41"
+    },
+    "Tungsten Sword": {
+        "Attack Damage": "+56-65",
+        "Critical Chance": "+38"
+    },
+    "Ancient Longsword": {
+        "Attack Damage": "+73-86",
+        "Attack Power": "+46",
+        "Critical Chance": "+93"
+    },
+    "Overseer\\'s Hand": {
+        "Attack Damage": "+77-90",
+        "Attack Power": "+49",
+        "Critical Chance": "+97"
+    },
+    "Overseer\\'s Grasp": {
+        "Attack Damage": "+81-96",
+        "Attack Power": "+52",
+        "Critical Chance": "+104"
+    },
+    "Platinum Sword": {
+        "Attack Damage": "+69-81",
+        "Critical Chance": "+48"
+    },
+    "Cobalt Sword": {
+        "Attack Damage": "+83-98",
+        "Critical Chance": "+58"
+    },
+    "Mythril Sword": {
+        "Attack Damage": "+97-114",
+        "Critical Chance": "+67"
+    },
+    "Obsidian Sword": {
+        "Attack Damage": "+111-130",
+        "Critical Chance": "+77"
+    },
+    "Gypsy Shiv": {
+        "Attack Damage": "+14-15"
+    },
+    "Copper Dagger": {
+        "Attack Damage": "+15-16",
+        "Dodge Chance": "+2",
+        "Critical Chance": "+5"
+    },
+    "Hunting Knife": {
+        "Attack Damage": "+19-20",
+        "Attack Power": "+4",
+        "Critical Chance": "+8"
+    },
+    "Camping Knife": {
+        "Attack Damage": "+19-21"
+    },
+    "Iron Dagger": {
+        "Attack Damage": "+29-32",
+        "Dodge Chance": "+5",
+        "Critical Chance": "+10"
+    },
+    "Skeletal Dagger": {
+        "Attack Damage": "+43-48",
+        "Attack Power": "+19"
+    },
+    "Bone Splinter": {
+        "Attack Damage": "+51-56",
+        "Attack Power": "+31",
+        "Critical Chance": "+63"
+    },
+    "Steel Dagger": {
+        "Attack Damage": "+43-48",
+        "Dodge Chance": "+7",
+        "Critical Chance": "+14"
+    },
+    "Tungsten Dagger": {
+        "Attack Damage": "+57-63",
+        "Dodge Chance": "+10",
+        "Critical Chance": "+19"
+    },
+    "Barbed Chakram": {
+        "Attack Damage": "+66-73",
+        "Attack Power": "+14",
+        "Critical Chance": "+29"
+    },
+    "Platinum Dagger": {
+        "Attack Damage": "+72-79",
+        "Dodge Chance": "+12",
+        "Critical Chance": "+24"
+    },
+    "Cobalt Dagger": {
+        "Attack Damage": "+86-95",
+        "Dodge Chance": "+14",
+        "Critical Chance": "+29"
+    },
+    "Mythril Dagger": {
+        "Attack Damage": "+100-111",
+        "Dodge Chance": "+17",
+        "Critical Chance": "+34"
+    },
+    "Obsidian Dagger": {
+        "Attack Damage": "+114-126",
+        "Dodge Chance": "+19",
+        "Critical Chance": "+38"
+    },
+    "Peasant Spear": {
+        "Attack Damage": "+20-29"
+    },
+    "Big Game Spear": {
+        "Attack Damage": "+23-34",
+        "Health Regen": "+45",
+        "Health": "+45  Regen"
+    },
+    "Iron Polearm": {
+        "Attack Damage": "+32-48",
+        "Critical Damage": "+19"
+    },
+    "Ancient Glaive": {
+        "Attack Damage": "+40-59",
+        "Attack Power": "+43",
+        "Critical Damage": "+43"
+    },
+    "Steel Polearm": {
+        "Attack Damage": "+48-72",
+        "Critical Damage": "+29"
+    },
+    "Spectral Polearm": {
+        "Attack Damage": "+71-106",
+        "Attack Power": "+78",
+        "Critical Damage": "+78"
+    },
+    "Oppressor": {
+        "Attack Damage": "+70-105",
+        "Attack Power": "+55"
+    },
+    "Tungsten Polearm": {
+        "Attack Damage": "+64-96",
+        "Critical Damage": "+38"
+    },
+    "Platinum Polearm": {
+        "Attack Damage": "+80-121",
+        "Critical Damage": "+48"
+    },
+    "Cobalt Polearm": {
+        "Attack Damage": "+96-144",
+        "Critical Chance": "+58"
+    },
+    "Mythril Polearm": {
+        "Attack Damage": "+112-168",
+        "Critical Damage": "+67"
+    },
+    "Obsidian Polearm": {
+        "Attack Damage": "+128-192",
+        "Critical Damage": "+77"
+    },
+    "Trapper Wand": {
+        "Magic Damage": "+3-4"
+    },
+    "Wood Wand": {
+        "Magic Damage": "+4-5",
+        "Cooldown Reduction": "+1",
+        "Critical Chance": "+1"
+    },
+    "Crooked Wand": {
+        "Magic Damage": "+11-14"
+    },
+    "Oak Wand": {
+        "Magic Damage": "+14-17",
+        "Cooldown Reduction": "+8",
+        "Critical Chance": "+5"
+    },
+    "Smoulder Wand": {
+        "Magic Damage": "+17-20"
+    },
+    "Swine Fury": {
+        "Magic Damage": "+22-27",
+        "Magic Power": "+10"
+    },
+    "Pine Wand": {
+        "Magic Damage": "+27-33",
+        "Cooldown Reduction": "+16",
+        "Critical Chance": "+10"
+    },
+    "Stalker\\'s Claw": {
+        "Magic Damage": "+37-46",
+        "Magic Power": "+17"
+    },
+    "Birch Wand": {
+        "Magic Damage": "+41-50",
+        "Cooldown Reduction": "+24",
+        "Critical Chance": "+14"
+    },
+    "Pearl Wand": {
+        "Magic Damage": "+63-76",
+        "Magic Power": "+22"
+    },
+    "Maple Wand": {
+        "Magic Damage": "+54-66",
+        "Cooldown Reduction": "+32",
+        "Critical Chance": "+19"
+    },
+    "Skeletal Wand": {
+        "Magic Damage": "+71-86",
+        "Magic Power": "+32"
+    },
+    "Temporal Will": {
+        "Magic Damage": "+80-97",
+        "Magic Power": "+52",
+        "Critical Chance": "+104"
+    },
+    "Mandrove Wand": {
+        "Magic Damage": "+68-83",
+        "Cooldown Reduction": "+40",
+        "Critical Chance": "+24"
+    },
+    "Pecan Wand": {
+        "Magic Damage": "+81-99",
+        "Cooldown Reduction": "+48",
+        "Critical Chance": "+29"
+    },
+    "Palm Wand": {
+        "Magic Damage": "+95-116",
+        "Cooldown Reduction": "+56",
+        "Critical Chance": "+34"
+    },
+    "Willow Wand": {
+        "Magic Damage": "+108-132",
+        "Cooldown Reduction": "+64",
+        "Critical Chance": "+38"
+    },
+    "Pumpkin Staff": {
+        "Magic Damage": "+17-23",
+        "Health Regen": "+72",
+        "Health": "+72  Regen",
+        "Critical Damage": "+22"
+    },
+    "Fake Pumpkin Staff": {
+        "Magic Damage": "+9-12",
+        "Health Regen": "+36",
+        "Health": "+36  Regen",
+        "Critical Damage": "+11"
+    },
+    "Shepherd Staff": {
+        "Magic Damage": "+21-28"
+    },
+    "Walking Stick": {
+        "Magic Damage": "+24-33",
+        "Critical Damage": "+13"
+    },
+    "Blossom Branch": {
+        "Magic Damage": "+38-51",
+        "Attack Power": "+26",
+        "Magic Power": "+26"
+    },
+    "Pine Staff": {
+        "Magic Damage": "+34-46",
+        "Critical Damage": "+19"
+    },
+    "Skeletal Staff": {
+        "Magic Damage": "+41-56",
+        "Magic Power": "+30"
+    },
+    "Pillar of Balance": {
+        "Magic Damage": "+51-68",
+        "Magic Power": "+52",
+        "Critical Damage": "+52"
+    },
+    "Birch Staff": {
+        "Magic Damage": "+51-69",
+        "Critical Damage": "+29"
+    },
+    "Spectral Staff": {
+        "Magic Damage": "+75-102",
+        "Magic Power": "+78",
+        "Critical Damage": "+78"
+    },
+    "Ritual Staff": {
+        "Magic Damage": "+80-107",
+        "Health Regen": "+274",
+        "Health": "+274  Regen",
+        "Cooldown Reduction": "+274"
+    },
+    "Maple Staff": {
+        "Magic Damage": "+68-92",
+        "Critical Damage": "+38"
+    },
+    "Mandrove Staff": {
+        "Magic Damage": "+85-115",
+        "Critical Damage": "+48"
+    },
+    "Pecan Staff": {
+        "Magic Damage": "+102-138",
+        "Critical Damage": "+58"
+    },
+    "Palm Staff": {
+        "Magic Damage": "+119-161",
+        "Critical Damage": "+67"
+    },
+    "Willow Staff": {
+        "Magic Damage": "+136-184",
+        "Critical Damage": "+77"
+    },
+    "Blessed Cudgel": {
+        "Magic Damage": "+16-19"
+    },
+    "Razorback Mauler": {
+        "Attack Damage": "+21-24",
+        "Attack Power": "+9"
+    },
+    "Pine Mace": {
+        "Magic Damage": "+29-32"
+    },
+    "Ceremonial Crucifix": {
+        "Magic Damage": "+38-43",
+        "Magic Power": "+17"
+    },
+    "Birch Mace": {
+        "Magic Damage": "+43-48"
+    },
+    "Tail of Canis": {
+        "Magic Damage": "+54-61",
+        "Magic Power": "+24"
+    },
+    "Loyalty of Canis": {
+        "Magic Damage": "+80-91",
+        "Magic Power": "+50",
+        "Critical Chance": "+99"
+    },
+    "Maple Mace": {
+        "Magic Damage": "+57-64"
+    },
+    "Stonescale Brutalizer": {
+        "Attack Damage": "+69-78",
+        "Attack Power": "+14"
+    },
+    "Sparkling Lasher": {
+        "Magic Damage": "+65-74",
+        "Magic Power": "+29"
+    },
+    "Mandrove Mace": {
+        "Magic Damage": "+71-80"
+    },
+    "Pecan Mace": {
+        "Magic Damage": "+85-96"
+    },
+    "Palm Mace": {
+        "Magic Damage": "+99-112"
+    },
+    "Willow Mace": {
+        "Magic Damage": "+113-128"
+    },
+    "Trapper Bow": {
+        "Attack Damage": "+6-7"
+    },
+    "Wood Bow": {
+        "Attack Damage": "+8-9",
+        "Critical Chance": "+1",
+        "Critical Damage": "+1"
+    },
+    "Flimsy Longbow": {
+        "Attack Damage": "+15-18"
+    },
+    "Oak Bow": {
+        "Attack Damage": "+18-23",
+        "Critical Chance": "+10",
+        "Critical Damage": "+5"
+    },
+    "Snap Bow": {
+        "Attack Damage": "+22-27"
+    },
+    "Huntsman Bow": {
+        "Attack Damage": "+25-32",
+        "Attack Power": "+13"
+    },
+    "Carrion\\'s Cry": {
+        "Attack Damage": "+29-36",
+        "Attack Power": "+20"
+    },
+    "Pine Bow": {
+        "Attack Damage": "+36-45",
+        "Critical Chance": "+19",
+        "Critical Damage": "+10"
+    },
+    "Greenflock Bow": {
+        "Attack Damage": "+45-56",
+        "Attack Power": "+24"
+    },
+    "Birch Bow": {
+        "Attack Damage": "+54-67",
+        "Critical Chance": "+29",
+        "Critical Damage": "+14"
+    },
+    "Maple Bow": {
+        "Attack Damage": "+72-89",
+        "Critical Chance": "+38",
+        "Critical Damage": "+19"
+    },
+    "Skeletal Bow": {
+        "Attack Damage": "+87-108",
+        "Attack Power": "+60"
+    },
+    "Greenflock Seeker": {
+        "Attack Damage": "+94-117",
+        "Attack Power": "+93",
+        "Critical Chance": "+83"
+    },
+    "Spinal Recurve": {
+        "Attack Damage": "+98-123",
+        "Attack Power": "+97",
+        "Critical Chance": "+86"
+    },
+    "Mandrove Bow": {
+        "Attack Damage": "+89-111",
+        "Critical Chance": "+48",
+        "Critical Damage": "+24"
+    },
+    "Pecan Bow": {
+        "Attack Damage": "+107-134",
+        "Critical Chance": "+58",
+        "Critical Damage": "+29"
+    },
+    "Palm Bow": {
+        "Attack Damage": "+125-156",
+        "Critical Chance": "+67",
+        "Critical Damage": "+34"
+    },
+    "Willow Bow": {
+        "Attack Damage": "+143-178",
+        "Critical Chance": "+77",
+        "Critical Damage": "+38"
+    },
+    "Pumpkin Necklace": {
+        "Health Regen": "+8",
+        "Health": "+8  Regen",
+        "Attack Power": "+2",
+        "Magic Power": "+2"
+    },
+    "Pumpkin Ring": {
+        "Health Regen": "+8",
+        "Health": "+8  Regen",
+        "Attack Power": "+2",
+        "Magic Power": "+2"
+    },
+    "Cursed Elf Hat": {
+        "Health": "+70",
+        "Attack Power": "+12",
+        "Magic Power": "+12"
+    },
+    "Forest Guardian Headdress": {
+        "Health": "+14"
+    },
+    "New Adventurer Shirt": {
+        "Armor": "+5",
+        "Health": "+4"
+    },
+    "New Adventurer Pants": {
+        "Armor": "+4",
+        "Health": "+3"
+    },
+    "Blessed Elf Hat": {
+        "Health": "+70",
+        "Attack Power": "+12",
+        "Magic Power": "+12"
+    },
+    "Winterforge Coal Necklace": {
+        "Health Regen": "+2",
+        "Health": "+2  Regen",
+        "Attack Power": "+1",
+        "Magic Power": "+1"
+    },
+    "Trapper Boots": {
+        "Health": "+13"
+    },
+    "Trapper Vest": {
+        "Armor": "+23",
+        "Health": "+19"
+    },
+    "Lumberjack Boots": {
+        "Health": "+12"
+    },
+    "Tin Bucket Hat": {
+        "Armor": "+13",
+        "Health": "+11"
+    },
+    "Lumberjack Pants": {
+        "Health": "+20"
+    },
+    "Wooden Buckler": {
+        "Block": "+6"
+    },
+    "Ragged Hat": {
+        "Health": "+15",
+        "Magic Power": "+5"
+    },
+    "Trapper Trousers": {
+        "Armor": "+32",
+        "Health": "+27"
+    },
+    "Lumberjack Shirt": {
+        "Health": "+31"
+    },
+    "Spectral Pendant": {
+        "Health Regen": "+12",
+        "Health": "+12  Regen",
+        "Attack Power": "+4",
+        "Magic Power": "+4"
+    },
+    "Oak Buckler": {
+        "Block": "+11",
+        "Health": "+9",
+        "Dodge Chance": "+2"
+    },
+    "Lumberjack Hat": {
+        "Health": "+48  Regen",
+        "Health Regen": "+48"
+    },
+    "Hunter\\'s Hat": {
+        "Health": "+35",
+        "Attack Power": "+6",
+        "Magic Power": "+6"
+    },
+    "Pig Skin Shield": {
+        "Block": "+13",
+        "Health": "+22"
+    },
+    "Promise Ring": {
+        "Attack Power": "+5",
+        "Magic Power": "+5"
+    },
+    "Cutting Board": {
+        "Block": "+19",
+        "Health Regen": "+36",
+        "Health": "+36  Regen"
+    },
+    "Mining Pants": {
+        "Mining": "15  (1.5% Extra Ore Chance)",
+        "Health": "+50"
+    },
+    "Elder\\'s Crown": {
+        "Health": "+72",
+        "Magic Power": "+24"
+    },
+    "Mining Vest": {
+        "Mining": "15  (1.5% Extra Ore Chance)",
+        "Health": "+62"
+    },
+    "Bone Collar": {
+        "Attack Power": "+4",
+        "Magic Power": "+4"
+    },
+    "Mining Boots": {
+        "Mining": "15  (1.5% Extra Ore Chance)",
+        "Attack Power": "+15"
+    },
+    "Mining Helmet": {
+        "Mining": "15  (1.5% Extra Ore Chance)",
+        "Health": "+86  Regen",
+        "Health Regen": "+86"
+    },
+    "Iron Shield": {
+        "Armor": "+18",
+        "Block": "+22",
+        "Health": "+19"
+    },
+    "Pine Buckler": {
+        "Block": "+22",
+        "Health": "+19",
+        "Dodge Chance": "+5"
+    },
+    "Fishing Boots": {
+        "Health Regen": "+54",
+        "Health": "+54  Regen",
+        "Fishing Strength": "10"
+    },
+    "Fishing Waders": {
+        "Health": "+70",
+        "Fishing Strength": "10"
+    },
+    "Wool Ushanka": {
+        "Health": "+45",
+        "Attack Power": "+8",
+        "Magic Power": "+8"
+    },
+    "Skeletal Ring": {
+        "Attack Power": "+8",
+        "Magic Power": "+8"
+    },
+    "1st Dryad Bloom Robes": {
+        "Health": "+69  Regen",
+        "Health Regen": "+69",
+        "Cooldown Reduction": "+139"
+    },
+    "2nd Dryad Bloom Robes": {
+        "Health": "+69  Regen",
+        "Health Regen": "+69",
+        "Cooldown Reduction": "+139"
+    },
+    "Fishing Vest": {
+        "Health": "+89",
+        "Fishing Strength": "10"
+    },
+    "Angler\\'s Hat": {
+        "Health": "+120  Regen",
+        "Health Regen": "+120",
+        "Attack Power": "+6",
+        "Fishing Strength": "10"
+    },
+    "Climbing Boots": {
+        "Health": "+40"
+    },
+    "Steel Shield": {
+        "Armor": "+26",
+        "Block": "+33",
+        "Health": "+28"
+    },
+    "Ceremonial Beads": {
+        "Attack Power": "+11",
+        "Magic Power": "+11"
+    },
+    "Birch Buckler": {
+        "Block": "+33",
+        "Health": "+28",
+        "Dodge Chance": "+7"
+    },
+    "Prospector Helmet": {
+        "Health": "+245  Regen",
+        "Health Regen": "+245",
+        "Attack Power": "+28",
+        "Magic Power": "+28"
+    },
+    "Bat Fur Shield": {
+        "Block": "+43",
+        "Health Regen": "+82",
+        "Health": "+82  Regen"
+    },
+    "Rib Cage": {
+        "Block": "+43",
+        "Health": "+48"
+    },
+    "Radiant Protector": {
+        "Block": "+49",
+        "Health": "+133  Regen",
+        "Health Regen": "+133"
+    },
+    "Tungsten Shield": {
+        "Armor": "+35",
+        "Block": "+44",
+        "Health": "+37"
+    },
+    "Shiny Scale Shield": {
+        "Block": "+50",
+        "Magic Power": "+29"
+    },
+    "Spiked Scale Shield": {
+        "Block": "+50",
+        "Attack Power": "+14",
+        "Critical Chance": "+29"
+    },
+    "Tooth Necklace": {
+        "Attack Power": "+14",
+        "Magic Power": "+14"
+    },
+    "Maple Buckler": {
+        "Block": "+44",
+        "Health": "+37",
+        "Dodge Chance": "+10"
+    },
+    "Hardened Scale Shield": {
+        "Armor": "+53",
+        "Block": "+54",
+        "Health Regen": "+48",
+        "Health": "+48  Regen"
+    },
+    "Overseer\\'s Gaze": {
+        "Block": "+60",
+        "Health": "+162  Regen",
+        "Health Regen": "+162"
+    },
+    "Greenflock Beret": {
+        "Health": "+221",
+        "Dodge Chance": "+75",
+        "Attack Power": "+75"
+    },
+    "Mandrove Buckler": {
+        "Block": "+55",
+        "Health": "+47",
+        "Dodge Chance": "+12"
+    },
+    "Platinum Shield": {
+        "Armor": "+44",
+        "Block": "+55",
+        "Health": "+47"
+    },
+    "Black Wool Ushanka": {
+        "Health": "+389  Regen",
+        "Health Regen": "+389",
+        "Attack Power": "+44",
+        "Magic Power": "+44"
+    },
+    "Cobalt Shield": {
+        "Armor": "+53",
+        "Block": "+66",
+        "Health": "+56"
+    },
+    "Pecan Buckler": {
+        "Block": "+66",
+        "Health": "+56",
+        "Dodge Chance": "+14"
+    },
+    "Mythril Shield": {
+        "Armor": "+62",
+        "Block": "+77",
+        "Health": "+65"
+    },
+    "Palm Buckler": {
+        "Block": "+77",
+        "Health": "+65",
+        "Dodge Chance": "+17"
+    },
+    "Willow Buckler": {
+        "Block": "+88",
+        "Health": "+75",
+        "Dodge Chance": "+19"
+    },
+    "Obsidian Shield": {
+        "Armor": "+70",
+        "Block": "+88",
+        "Health": "+75"
+    },
+    "Copper Platelegs": {
+        "Armor": "+44",
+        "Health": "+37"
+    },
+    "Copper Boots": {
+        "Armor": "+22",
+        "Health": "+18"
+    },
+    "Copper Breastplate": {
+        "Armor": "+37",
+        "Health": "+46",
+        "Health Regen": "+17"
+    },
+    "Iron Platelegs": {
+        "Armor": "+83",
+        "Health": "+70"
+    },
+    "Iron Boots": {
+        "Armor": "+42",
+        "Health": "+34"
+    },
+    "Iron Breastplate": {
+        "Armor": "+68",
+        "Health": "+85",
+        "Health Regen": "+31"
+    },
+    "Steel Platelegs": {
+        "Armor": "+123",
+        "Health": "+103"
+    },
+    "Steel Boots": {
+        "Armor": "+61",
+        "Health": "+50"
+    },
+    "Steel Breastplate": {
+        "Armor": "+99",
+        "Health": "+124",
+        "Health Regen": "+45"
+    },
+    "Steel Lid": {
+        "Armor": "+58",
+        "Health": "+70",
+        "Attack Power": "+8"
+    },
+    "Tungsten Platelegs": {
+        "Armor": "+162",
+        "Health": "+137"
+    },
+    "Tungsten Boots": {
+        "Armor": "+81",
+        "Health": "+66"
+    },
+    "Tungsten Breastplate": {
+        "Armor": "+129",
+        "Health": "+162",
+        "Health Regen": "+59"
+    },
+    "Tungsten Lid": {
+        "Armor": "+76",
+        "Health": "+92",
+        "Attack Power": "+10"
+    },
+    "Platinum Boots": {
+        "Armor": "+101",
+        "Health": "+82"
+    },
+    "Platinum Platelegs": {
+        "Armor": "+202",
+        "Health": "+170"
+    },
+    "Platinum Breastplate": {
+        "Armor": "+160",
+        "Health": "+201",
+        "Health Regen": "+73"
+    },
+    "Platinum Lid": {
+        "Armor": "+93",
+        "Health": "+113",
+        "Attack Power": "+13"
+    },
+    "Cobalt Platelegs": {
+        "Armor": "+242",
+        "Health": "+203"
+    },
+    "Cobalt Boots": {
+        "Armor": "+121",
+        "Health": "+98"
+    },
+    "Cobalt Breastplate": {
+        "Armor": "+191",
+        "Health": "+240",
+        "Health Regen": "+87"
+    },
+    "Cobalt Lid": {
+        "Armor": "+111",
+        "Health": "+134",
+        "Attack Power": "+15"
+    },
+    "Mythril Platelegs": {
+        "Armor": "+281",
+        "Health": "+237"
+    },
+    "Mythril Boots": {
+        "Armor": "+141",
+        "Health": "+114"
+    },
+    "Mythril Breastplate": {
+        "Armor": "+222",
+        "Health": "+278",
+        "Health Regen": "+101"
+    },
+    "Mythril Helm": {
+        "Armor": "+128",
+        "Health": "+156",
+        "Attack Power": "+18"
+    },
+    "Obsidian Boots": {
+        "Armor": "+160",
+        "Health": "+130"
+    },
+    "Obsidian Platelegs": {
+        "Armor": "+321",
+        "Health": "+270"
+    },
+    "Obsidian Breastplate": {
+        "Armor": "+253",
+        "Health": "+317",
+        "Health Regen": "+115"
+    },
+    "Obsidian Helm": {
+        "Armor": "+146",
+        "Health": "+177",
+        "Attack Power": "+20"
+    },
+    "Flimsy Strides": {
+        "Health": "+37",
+        "Dodge Chance": "+12"
+    },
+    "Flimsy Boots": {
+        "Health": "+18",
+        "Dodge Chance": "+6"
+    },
+    "Flimsy Coat": {
+        "Health": "+46",
+        "Health Regen": "+17",
+        "Dodge Chance": "+10"
+    },
+    "Plush Strides": {
+        "Health": "+70",
+        "Dodge Chance": "+23"
+    },
+    "Plush Boots": {
+        "Health": "+34",
+        "Dodge Chance": "+11"
+    },
+    "Plush Coat": {
+        "Health": "+85",
+        "Health Regen": "+31",
+        "Dodge Chance": "+18"
+    },
+    "Fragile Boots": {
+        "Health": "+50",
+        "Dodge Chance": "+17"
+    },
+    "Fragile Strides": {
+        "Health": "+103",
+        "Dodge Chance": "+33"
+    },
+    "Fragile Coat": {
+        "Health": "+124",
+        "Health Regen": "+45",
+        "Dodge Chance": "+27"
+    },
+    "Fragile Hood": {
+        "Health": "+70",
+        "Dodge Chance": "+16",
+        "Attack Power": "+8"
+    },
+    "Delicate Boots": {
+        "Health": "+66",
+        "Dodge Chance": "+22"
+    },
+    "Delicate Strides": {
+        "Health": "+137",
+        "Dodge Chance": "+44"
+    },
+    "Delicate Coat": {
+        "Health": "+162",
+        "Health Regen": "+59",
+        "Dodge Chance": "+35"
+    },
+    "Delicate Hood": {
+        "Health": "+92",
+        "Dodge Chance": "+21",
+        "Attack Power": "+10"
+    },
+    "Graceful Strides": {
+        "Health": "+170",
+        "Dodge Chance": "+54"
+    },
+    "Graceful Boots": {
+        "Health": "+82",
+        "Dodge Chance": "+28"
+    },
+    "Graceful Coat": {
+        "Health": "+201",
+        "Health Regen": "+73",
+        "Dodge Chance": "+44"
+    },
+    "Graceful Hood": {
+        "Health": "+113",
+        "Dodge Chance": "+25",
+        "Attack Power": "+13"
+    },
+    "Sturdy Boots": {
+        "Health": "+98",
+        "Dodge Chance": "+33"
+    },
+    "Sturdy Strides": {
+        "Health": "+203",
+        "Dodge Chance": "+66"
+    },
+    "Sturdy Coat": {
+        "Health": "+240",
+        "Health Regen": "+87",
+        "Dodge Chance": "+52"
+    },
+    "Sturdy Hood": {
+        "Health": "+134",
+        "Dodge Chance": "+30",
+        "Attack Power": "+15"
+    },
+    "Durable Strides": {
+        "Health": "+237",
+        "Dodge Chance": "+77"
+    },
+    "Durable Boots": {
+        "Health": "+114",
+        "Dodge Chance": "+38"
+    },
+    "Durable Coat": {
+        "Health": "+278",
+        "Health Regen": "+101",
+        "Dodge Chance": "+60"
+    },
+    "Durable Hood": {
+        "Health": "+156",
+        "Dodge Chance": "+35",
+        "Attack Power": "+18"
+    },
+    "Rugged Strides": {
+        "Health": "+270",
+        "Dodge Chance": "+87"
+    },
+    "Rugged Boots": {
+        "Health": "+130",
+        "Dodge Chance": "+44"
+    },
+    "Rugged Coat": {
+        "Health": "+317",
+        "Health Regen": "+115",
+        "Dodge Chance": "+69"
+    },
+    "Rugged Hood": {
+        "Health": "+177",
+        "Dodge Chance": "+40",
+        "Attack Power": "+20"
+    },
+    "Light Trousers": {
+        "Health": "+37",
+        "Critical Damage": "+12"
+    },
+    "Light Slippers": {
+        "Health": "+18",
+        "Cooldown Reduction": "+20"
+    },
+    "Light Robes": {
+        "Health": "+46",
+        "Health Regen": "+17",
+        "Cooldown Reduction": "+34"
+    },
+    "Light Mantle": {
+        "Health": "+46",
+        "Critical Damage": "+10",
+        "Cooldown Reduction": "+17"
+    },
+    "Heavy Trousers": {
+        "Health": "+70",
+        "Critical Damage": "+23"
+    },
+    "Heavy Slippers": {
+        "Health": "+34",
+        "Cooldown Reduction": "+38"
+    },
+    "Heavy Mantle": {
+        "Health": "+85",
+        "Critical Damage": "+18",
+        "Cooldown Reduction": "+31"
+    },
+    "Heavy Robes": {
+        "Health": "+85",
+        "Health Regen": "+31",
+        "Cooldown Reduction": "+62"
+    },
+    "Wool Trousers": {
+        "Health": "+103",
+        "Critical Damage": "+33"
+    },
+    "Wool Slippers": {
+        "Health": "+50",
+        "Cooldown Reduction": "+56"
+    },
+    "Wool Mantle": {
+        "Health": "+124",
+        "Critical Damage": "+27",
+        "Cooldown Reduction": "+45"
+    },
+    "Wool Robes": {
+        "Health": "+124",
+        "Health Regen": "+45",
+        "Cooldown Reduction": "+90"
+    },
+    "Wool Cowl": {
+        "Health": "+70",
+        "Magic Power": "+8",
+        "Cooldown Reduction": "+53"
+    },
+    "Linen Trousers": {
+        "Health": "+137",
+        "Critical Damage": "+44"
+    },
+    "Linen Slippers": {
+        "Health": "+66",
+        "Cooldown Reduction": "+74"
+    },
+    "Linen Robes": {
+        "Health": "+162",
+        "Health Regen": "+59",
+        "Cooldown Reduction": "+118"
+    },
+    "Linen Mantle": {
+        "Health": "+162",
+        "Critical Damage": "+35",
+        "Cooldown Reduction": "+59"
+    },
+    "Linen Cowl": {
+        "Health": "+92",
+        "Magic Power": "+10",
+        "Cooldown Reduction": "+69"
+    },
+    "Silk Slippers": {
+        "Health": "+82",
+        "Cooldown Reduction": "+92"
+    },
+    "Silk Trousers": {
+        "Health": "+170",
+        "Critical Damage": "+55"
+    },
+    "Silk Mantle": {
+        "Health": "+201",
+        "Critical Damage": "+44",
+        "Cooldown Reduction": "+73"
+    },
+    "Silk Robes": {
+        "Health": "+201",
+        "Health Regen": "+73",
+        "Cooldown Reduction": "+146"
+    },
+    "Silk Cowl": {
+        "Health": "+113",
+        "Magic Power": "+13",
+        "Cooldown Reduction": "+85"
+    },
+    "Lace Trousers": {
+        "Health": "+203",
+        "Critical Damage": "+66"
+    },
+    "Lace Slippers": {
+        "Health": "+98",
+        "Cooldown Reduction": "+110"
+    },
+    "Lace Mantle": {
+        "Health": "+240",
+        "Critical Damage": "+52",
+        "Cooldown Reduction": "+87"
+    },
+    "Lace Robes": {
+        "Health": "+240",
+        "Health Regen": "+87",
+        "Cooldown Reduction": "+174"
+    },
+    "Lace Cowl": {
+        "Health": "+134",
+        "Magic Power": "+15",
+        "Cooldown Reduction": "+101"
+    },
+    "Runeweave Slippers": {
+        "Health": "+114",
+        "Cooldown Reduction": "+128"
+    },
+    "Runeweave Trousers": {
+        "Health": "+237",
+        "Critical Damage": "+77"
+    },
+    "Runeweave Mantle": {
+        "Health": "+278",
+        "Critical Damage": "+60",
+        "Cooldown Reduction": "+101"
+    },
+    "Runeweave Robes": {
+        "Health": "+278",
+        "Health Regen": "+101",
+        "Cooldown Reduction": "+202"
+    },
+    "Runeweave Cowl": {
+        "Health": "+156",
+        "Magic Power": "+18",
+        "Cooldown Reduction": "+117"
+    },
+    "Hexweave Trousers": {
+        "Health": "+270",
+        "Critical Damage": "+87"
+    },
+    "Hexweave Slippers": {
+        "Health": "+130",
+        "Cooldown Reduction": "+146"
+    },
+    "Hexweave Mantle": {
+        "Health": "+317",
+        "Critical Damage": "+69",
+        "Cooldown Reduction": "+115"
+    },
+    "Hexweave Robes": {
+        "Health": "+317",
+        "Health Regen": "+115",
+        "Cooldown Reduction": "+230"
+    },
+    "Hexweave Cowl": {
+        "Health": "+177",
+        "Magic Power": "+20",
+        "Cooldown Reduction": "+133"
+    },
+    "Light Waders": {
+        "Health": "+37",
+        "Focus": "+40"
+    },
+    "Light Vestments": {
+        "Health": "+46",
+        "Focus": "+10",
+        "Cooldown Reduction": "+17"
+    },
+    "Heavy Waders": {
+        "Health": "+70",
+        "Focus": "+76"
+    },
+    "Heavy Vestments": {
+        "Health": "+85",
+        "Focus": "+18",
+        "Cooldown Reduction": "+31"
+    },
+    "Wool Waders": {
+        "Health": "+103",
+        "Focus": "+112"
+    },
+    "Wool Vestments": {
+        "Health": "+124",
+        "Focus": "+27",
+        "Cooldown Reduction": "+45"
+    },
+    "Linen Waders": {
+        "Health": "+137",
+        "Focus": "+148"
+    },
+    "Linen Vestments": {
+        "Health": "+162",
+        "Focus": "+35",
+        "Cooldown Reduction": "+59"
+    },
+    "Silk Waders": {
+        "Health": "+170",
+        "Focus": "+184"
+    },
+    "Silk Vestments": {
+        "Health": "+201",
+        "Focus": "+44",
+        "Cooldown Reduction": "+73"
+    },
+    "Lace Waders": {
+        "Health": "+203",
+        "Focus": "+220"
+    },
+    "Lace Vestments": {
+        "Health": "+240",
+        "Focus": "+52",
+        "Cooldown Reduction": "+87"
+    },
+    "Runeweave Waders": {
+        "Health": "+237",
+        "Focus": "+256"
+    },
+    "Runeweave Vestments": {
+        "Health": "+278",
+        "Focus": "+60",
+        "Cooldown Reduction": "+101"
+    },
+    "Hexweave Waders": {
+        "Health": "+270",
+        "Focus": "+292"
+    },
+    "Hexweave Vestments": {
+        "Health": "+317",
+        "Focus": "+69",
+        "Cooldown Reduction": "+115"
+    }
+}

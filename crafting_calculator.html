@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Crafting Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Color Palette */
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --accent: #10b981;
+            /* Emerald for results */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+
+            /* Spacing & Radius */
+            --radius: 12px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: var(--spacing-lg);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        @media (min-width: 900px) {
+            .container {
+                grid-template-columns: 2fr 1fr;
+                /* Inputs | Results */
+            }
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+        }
+
+        /* Input Grid */
+        .input-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .item-recipe {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .stepper-btn {
+            background: var(--bg-card);
+            border: none;
+            color: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .stepper-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .stepper-btn:active {
+            transform: scale(0.95);
+        }
+
+        input[type="number"] {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px 0;
+            width: 60px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .item-icon-img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            margin-right: var(--spacing-md);
+            filter: drop_shadow(0 0 5px rgba(0, 0, 0, 0.5));
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            padding: var(--spacing-lg);
+            position: sticky;
+            top: var(--spacing-lg);
+            height: fit-content;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .results-header {
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            color: var(--accent);
+        }
+
+        .result-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .result-group h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .res-name {
+            color: var(--text-main);
+        }
+
+        .res-val {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .total-wood-highlight {
+            margin-top: var(--spacing-md);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--accent);
+            padding: var(--spacing-md);
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .total-wood-highlight .val {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+            display: block;
+        }
+
+        .total-wood-highlight .label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Result Icons */
+        .res-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+            object-fit: contain;
+        }
+
+        /* Utility */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 900px) {
+            .stepper-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 1.4rem;
+            }
+
+            input[type="number"] {
+                font-size: 16px;
+                /* Prevents auto-zoom on iOS */
+                width: 70px;
+                padding: 10px 0;
+            }
+
+            /* Floating Action Button */
+            #mobileFab {
+                display: flex !important;
+            }
+        }
+
+        #mobileFab {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            cursor: pointer;
+            font-weight: bold;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container fade-in">
+        <header>
+            <h1>Smithing Planner</h1>
+            <p class="subtitle">Calculate resources needed for production runs</p>
+            <div style="margin-top: 15px;">
+                <button onclick="window.location.href='weapon_calculator.html'"
+                    style="padding: 10px 20px; background: var(--primary); border: 1px solid var(--border); border-radius: 8px; color: white; cursor: pointer; font-family: 'Outfit', sans-serif; font-weight: 600; transition: all 0.2s;">
+                    Go to Weapon & Armor Calculator →
+                </button>
+            </div>
+        </header>
+
+        <!-- Inputs Section -->
+        <div class="input-section" id="inputContainer">
+            <!-- Items will be injected by JS -->
+        </div>
+
+        <!-- Output Section -->
+        <aside class="results-panel" id="resultsPanel">
+            <h2 class="results-header">Shopping List</h2>
+
+            <div class="result-group">
+                <h3>Ores Needed</h3>
+                <div id="oresList">
+                    <div class="result-item"><span class="res-name">-</span></div>
+                </div>
+            </div>
+
+            <div class="result-group">
+                <h3>Consumption</h3>
+                <div id="fuelList">
+                    <div class="result-item">
+                        <span class="res-name">
+                            <img src="assets/coal.png" class="res-icon" alt="Coal">Coal (Total)
+                        </span>
+                        <span class="res-val" id="totalCoal">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="total-wood-highlight">
+                <span class="label">Total Raw Wood Required</span>
+                <span class="val" id="totalWood">0</span>
+            </div>
+
+            <div style="margin-top: 20px; font-size: 0.8rem; color: #64748b; text-align: center;">
+                Includes wood for converting to coal.
+            </div>
+        </aside>
+    </div>
+
+    <a href="#resultsPanel" id="mobileFab">
+        <span>📝 View List</span>
+    </a>
+
+    <script>
+        const RECIPES = [
+            { id: "tin_bar", name: "Tin Bar", nameCN: "锡锭", icon: "assets/tin_bar.png", level: 1, ingredients: { "Tin Ore": 3, "Coal": 2 }, type: "bar" },
+            { id: "coal", name: "Coal", nameCN: "煤炭", icon: "assets/coal.png", level: 1, ingredients: { "Wood": 2 }, type: "resource" },
+            { id: "copper_bar", name: "Copper Bar", nameCN: "铜锭", icon: "assets/copper_bar.png", level: 5, ingredients: { "Copper Ore": 3, "Coal": 2 }, type: "bar" },
+            { id: "iron_bar", name: "Iron Bar", nameCN: "铁锭", icon: "assets/iron_bar.png", level: 10, ingredients: { "Iron Ore": 3, "Coal": 2 }, type: "bar" },
+            { id: "steel_bar", name: "Steel Bar", nameCN: "钢锭", icon: "assets/steel_bar.png", level: 15, ingredients: { "Iron Ore": 6, "Coal": 3 }, type: "bar" },
+            { id: "tungsten_bar", name: "Tungsten Bar", nameCN: "钨锭", icon: "assets/tungsten_bar.png", level: 25, ingredients: { "Tungsten Ore": 3, "Coal": 2 }, type: "bar" },
+            { id: "platinum_bar", name: "Platinum Bar", nameCN: "白金锭", icon: "assets/platinum_bar.png", level: 35, ingredients: { "Platinum Ore": 3, "Coal": 4 }, type: "bar" },
+            { id: "cobalt_bar", name: "Cobalt Bar", nameCN: "钴锭", icon: "assets/cobalt_bar.png", level: 45, ingredients: { "Cobalt Ore": 3, "Coal": 4 }, type: "bar" },
+            { id: "mythril_bar", name: "Mythril Bar", nameCN: "秘银锭", icon: "assets/mythril_bar.png", level: 55, ingredients: { "Mythril Ore": 3, "Coal": 4 }, type: "bar" },
+            { id: "obsidian_bar", name: "Obsidian Bar", nameCN: "黑曜石锭", icon: "assets/obsidian_bar.png", level: 65, ingredients: { "Obsidian Ore": 3, "Coal": 6 }, type: "bar" },
+            { id: "radium_bar", name: "Radium Bar", nameCN: "镭锭", icon: "assets/radium_bar.png", level: 75, ingredients: { "Radium Ore": 3, "Coal": 6 }, type: "bar" },
+
+            // Leather / Materials
+            { id: "flimsy_leather", name: "Flimsy Leather", nameCN: "薄皮革", icon: "assets/items/flimsy_leather.png", level: 1, ingredients: { "Rodent Pelt": 2 }, type: "material" },
+            { id: "plush_leather", name: "Plush Leather", nameCN: "毛绒皮革", icon: "assets/items/plush_leather.png", level: 10, ingredients: { "Rodent Pelt": 2, "Soft Hide": 1 }, type: "material" },
+            { id: "fragile_leather", name: "Fragile Leather", nameCN: "易碎皮革", icon: "assets/items/fragile_leather.png", level: 15, ingredients: { "Soft Hide": 2, "Bone Dust": 1 }, type: "material" },
+            { id: "bone_dust", name: "Bone Dust", nameCN: "骨粉", icon: "assets/items/bone_dust.png", level: 1, ingredients: { "Bone": 2 }, type: "resource" },
+            { id: "light_leather_cord", name: "Light Leather Cord", nameCN: "轻皮绳", icon: "assets/items/light_leather_cord.png", level: 20, ingredients: { "Rodent Pelt": 6, "Bone Dust": 1 }, type: "material" },
+            { id: "delicate_leather", name: "Delicate Leather", nameCN: "精致皮革", icon: "assets/items/delicate_leather.png", level: 25, ingredients: { "Rodent Pelt": 2, "Soft Hide": 2, "Bone Dust": 1 }, type: "material" },
+            { id: "heavy_leather_cord", name: "Heavy Leather Cord", nameCN: "重皮绳", icon: "assets/items/heavy_leather_cord.png", level: 30, ingredients: { "Soft Hide": 2, "Medium Hide": 2 }, type: "material" },
+            { id: "graceful_leather", name: "Graceful Leather", nameCN: "优雅皮革", icon: "assets/items/graceful_leather.png", level: 35, ingredients: { "Medium Hide": 2, "Bone Dust": 1 }, type: "material" },
+            { id: "sturdy_leather", name: "Sturdy Leather", nameCN: "坚固皮革", icon: "assets/items/sturdy_leather.png", level: 45, ingredients: { "Soft Hide": 2, "Medium Hide": 2, "Leather Oil": 1 }, type: "material" },
+            { id: "durable_leather", name: "Durable Leather", nameCN: "耐用皮革", icon: "assets/items/durable_leather.png", level: 55, ingredients: { "Thick Hide": 2, "Leather Oil": 1 }, type: "material" },
+            { id: "rugged_leather", name: "Rugged Leather", nameCN: "粗糙皮革", icon: "assets/items/rugged_leather.png", level: 65, ingredients: { "Medium Hide": 2, "Thick Hide": 2, "Leather Oil": 1 }, type: "material" },
+
+            // Fabric / Cloth
+            { id: "light_cotton_fabric", name: "Light Cotton Fabric", nameCN: "轻棉布", icon: "assets/items/light_cotton_fabric.png", level: 1, ingredients: { "Cotton": 3 }, type: "material" },
+            { id: "thread", name: "Thread", nameCN: "线", icon: "assets/items/thread.png", level: 5, ingredients: { "Cotton": 6 }, type: "material" },
+            { id: "heavy_cotton_fabric", name: "Heavy Cotton Fabric", nameCN: "重棉布", icon: "assets/items/heavy_cotton_fabric.png", level: 5, ingredients: { "Cotton": 6 }, type: "material" },
+            { id: "wool_fabric", name: "Wool Fabric", nameCN: "羊毛布", icon: "assets/items/wool_fabric.png", level: 15, ingredients: { "Wool": 4 }, type: "material" },
+            { id: "yarn", name: "Yarn", nameCN: "纱线", icon: "assets/items/yarn.png", level: 15, ingredients: { "Wool": 4 }, type: "material" },
+            { id: "linen_fabric", name: "Linen Fabric", nameCN: "亚麻布", icon: "assets/items/linen_fabric.png", level: 25, ingredients: { "Wool": 4, "Cotton": 3 }, type: "material" },
+            { id: "silk_thread", name: "Silk Thread", nameCN: "丝线", icon: "assets/items/silk_thread.png", level: 25, ingredients: { "Silk": 4 }, type: "material" },
+            { id: "black_wool_fabric", name: "Black Wool Fabric", nameCN: "黑羊毛布", icon: "assets/items/black_wool_fabric.png", level: 25, ingredients: { "Black Wool": 10 }, type: "material" },
+            { id: "silk_fabric", name: "Silk Fabric", nameCN: "丝绸", icon: "assets/items/silk_fabric.png", level: 35, ingredients: { "Silk": 4 }, type: "material" },
+            { id: "lace_fabric", name: "Lace Fabric", nameCN: "蕾丝", icon: "assets/items/lace_fabric.png", level: 45, ingredients: { "Wool": 2, "Silk": 4, "Mystic Thread": 1 }, type: "material" },
+            { id: "runeweave_fabric", name: "Runeweave Fabric", nameCN: "符文布", icon: "assets/items/runeweave_fabric.png", level: 55, ingredients: { "Lace Fabric": 4, "Mystic Thread": 1 }, type: "material" },
+            { id: "hexweave_fabric", name: "Hexweave Fabric", nameCN: "六角织布", icon: "assets/items/hexweave_fabric.png", level: 65, ingredients: { "Lace Fabric": 2, "Obsidian Fragments": 1 }, type: "material" },
+        ];
+
+        const TRANSLATIONS = {
+            "Tin Ore": "锡矿", "Coal": "煤炭", "Wood": "木材", "Copper Ore": "铜矿", "Iron Ore": "铁矿",
+            "Tungsten Ore": "钨矿", "Platinum Ore": "白金矿", "Cobalt Ore": "钴矿", "Mythril Ore": "秘银矿",
+            "Obsidian Ore": "黑曜石矿", "Radium Ore": "镭矿",
+            "Rodent Pelt": "啮齿动物皮", "Bone": "骨头", "Soft Hide": "软皮", "Bone Dust": "骨粉",
+            "Medium Hide": "中皮", "Thick Hide": "厚皮", "Leather Oil": "皮革油",
+            "Cotton": "棉花", "Wool": "羊毛", "Silk": "丝绸", "Black Wool": "黑羊毛", "Mystic Thread": "神秘线",
+            "Obsidian Fragments": "黑曜石碎片", "Lace Fabric": "蕾丝"
+        };
+
+        function getIconUrl(name) {
+            // Check known asset paths first or fallback to generated
+            const map = {
+                // Leather / Hides
+                "Rodent Pelt": "assets/items/rodent_pelt.png",
+                "Soft Hide": "assets/items/soft_hide.png",
+                "Medium Hide": "assets/items/medium_hide.png",
+                "Thick Hide": "assets/items/thick_hide.png",
+                "Leather Oil": "assets/items/leather_oil.png",
+                "Bone Dust": "assets/items/bone_dust.png",
+                "Bone": "assets/items/bone.png",
+
+                // Fabric / Cloth / Threads
+                "Cotton": "assets/items/cotton.png",
+                "Wool": "assets/items/wool.png",
+                "Silk": "assets/items/silk.png",
+                "Black Wool": "assets/items/black_wool.png",
+                "Mystic Thread": "assets/items/mystic_thread.png",
+                "Obsidian Fragments": "assets/items/obsidian_fragments.png",
+                "Lace Fabric": "assets/items/lace_fabric.png"
+            };
+            if (map[name]) return map[name];
+
+            const filename = name.toLowerCase().replace(/ /g, '_') + '.png';
+            return `assets/${filename}`;
+        }
+
+        function getDualName(englishName) {
+            const cn = TRANSLATIONS[englishName] || "";
+            return cn ? `${englishName} <span style="color:var(--text-muted); font-size: 0.9em;">${cn}</span>` : englishName;
+        }
+
+        // State to hold user inputs
+        let userInputs = {};
+
+        function init() {
+            const container = document.getElementById('inputContainer');
+
+            RECIPES.forEach(item => {
+                userInputs[item.id] = 0;
+
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                let recipeText = Object.entries(item.ingredients)
+                    .map(([name, qty]) => {
+                        const cn = TRANSLATIONS[name];
+                        return `${qty} ${name}` + (cn ? ` (${cn})` : '');
+                    })
+                    .join(', ');
+
+                card.innerHTML = `
+                    <div style="display:flex; align-items:center;">
+                        <img src="${item.icon}" class="item-icon-img" alt="${item.name}" onerror="this.src='assets/placeholder.png'">
+                        <div class="item-info">
+                            <div class="item-name">${item.name} <span style="font-size:0.8em; color:var(--text-muted)">${item.nameCN}</span></div>
+                            <div class="item-recipe">Req: ${recipeText}</div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <button class="stepper-btn" onclick="changeValue('${item.id}', -1)">−</button>
+                        <input type="number" min="0" value="" placeholder="0" id="input-${item.id}" data-id="${item.id}" oninput="handleInput(this)">
+                        <button class="stepper-btn" onclick="changeValue('${item.id}', 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.changeValue = function (id, delta) {
+            const input = document.getElementById(`input-${id}`);
+            let val = parseInt(input.value) || 0;
+            val = Math.max(0, val + delta);
+            input.value = val === 0 ? '' : val;
+            userInputs[id] = val;
+            calculate();
+        }
+
+        window.handleInput = function (el) {
+            const id = el.dataset.id;
+            const val = parseInt(el.value) || 0;
+            userInputs[id] = val;
+            calculate();
+        }
+
+        function calculate() {
+            let totalMaterials = {};
+            let totalCoalNeeded = 0; // Coal needed for bars
+            let directCoalRequested = userInputs['coal'] || 0; // Coal requested directly
+
+            // 1. Calculate direct requirements
+            RECIPES.forEach(item => {
+                const qty = userInputs[item.id] || 0;
+                if (qty > 0 && item.id !== 'coal') { // Skip coal for now logic handled separately
+                    Object.entries(item.ingredients).forEach(([ingName, ingQty]) => {
+                        if (ingName === 'Coal') {
+                            totalCoalNeeded += (ingQty * qty);
+                        } else {
+                            // Add all non-coal ingredients to materials list
+                            totalMaterials[ingName] = (totalMaterials[ingName] || 0) + (ingQty * qty);
+                        }
+                    });
+                }
+            });
+
+            // 2. Calculate Wood
+            // Total Coal to Produce = (Coal needed for bars) + (Directly requested Coal)
+            const finalCoalTarget = totalCoalNeeded + directCoalRequested;
+            const woodForCoal = finalCoalTarget * 2; // 1 Coal = 2 Wood
+
+            // Render Results
+            renderResults(totalMaterials, finalCoalTarget, woodForCoal);
+        }
+
+        function renderResults(materials, coal, wood) {
+            // Update Header
+            document.querySelector('.results-header').innerText = "Shopping List";
+            document.querySelector('#oresList').previousElementSibling.innerText = "Materials Needed";
+
+            // Render Materials
+            const matContainer = document.getElementById('oresList');
+            matContainer.innerHTML = '';
+
+            if (Object.keys(materials).length === 0) {
+                matContainer.innerHTML = '<div class="result-item"><span class="res-name" style="color:var(--text-muted)">None / 无</span></div>';
+            } else {
+                // Sort for better readability
+                const sortedKeys = Object.keys(materials).sort();
+                for (const name of sortedKeys) {
+                    const qty = materials[name];
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    const iconUrl = getIconUrl(name);
+                    div.innerHTML = `<span class="res-name"><img src="${iconUrl}" class="res-icon" alt="${name}" onerror="this.onerror=null;this.src='assets/placeholder.png'">${getDualName(name)}</span><span class="res-val">${qty}</span>`;
+                    matContainer.appendChild(div);
+                }
+            }
+
+            // Render Fuel
+            document.getElementById('totalCoal').innerHTML = coal;
+
+            // Render Wood
+            const woodEl = document.getElementById('totalWood');
+            woodEl.innerHTML = wood;
+
+            // Animation effect on change
+            woodEl.style.transform = "scale(1.2)";
+            setTimeout(() => woodEl.style.transform = "scale(1)", 200);
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+
+</html>
