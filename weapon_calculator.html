@@ -21,6 +21,12 @@
             --spacing: 16px;
         }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
@@ -28,7 +34,16 @@
             padding: 20px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                overflow-x: hidden;
+            }
+        }
+
 
         .container {
             max-width: 1200px;
@@ -63,6 +78,23 @@
             justify-content: space-between;
             padding: 10px;
             border-bottom: 1px solid var(--border);
+            gap: 10px;
+        }
+
+        @media (max-width: 400px) {
+            .weapon-row {
+                flex-wrap: wrap;
+            }
+
+            .weapon-info {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            .controls {
+                width: 100%;
+                justify-content: flex-end;
+            }
         }
 
         .weapon-info {
@@ -206,6 +238,7 @@
             padding: 5px;
             border-radius: 10px;
             border: 1px solid var(--border);
+            flex-wrap: wrap;
         }
 
         .tab {
@@ -289,6 +322,30 @@
             color: var(--accent);
             font-weight: bold;
         }
+
+        #mobileFab {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            cursor: pointer;
+            text-decoration: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: transform 0.2s;
+        }
+
+        #mobileFab:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 
@@ -327,8 +384,8 @@
             </div>
     </div>
 
-    <a href="#resultsPanel" id="mobileFab">
-        <span>📝 View Materials</span>
+    <a href="#resultsPanel" id="mobileFab" title="View Materials">
+        <span>📝</span>
     </a>
 
     <script>
